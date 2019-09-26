@@ -1,0 +1,34 @@
+{
+  "name": "rstgroup/jira-tempo-api-client",
+  "license": "MIT",
+  "type": "library",
+  "description": "PHP Library - Jira and Tempo API (Current version V3)",
+  "keywords": ["jira", "tempo", "api", "rest", "php", "library"],
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Michał Ligus",
+      "email": "michal.ligus@rst.com.pl"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "JiraTempoApi\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "ext-json": "*",
+    "vlucas/phpdotenv": "^3.6",
+    "lesstif/php-jira-rest-client": "^1.41",
+    "guzzlehttp/guzzle": "^6.3",
+    "kherge/json": "^2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.3"
+  }
+}

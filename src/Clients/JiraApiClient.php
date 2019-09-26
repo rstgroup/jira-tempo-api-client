@@ -3,8 +3,6 @@
 namespace JiraTempoApi\Clients;
 
 use JiraRestApi\JiraClient;
-use JiraRestApi\JiraException;
-use JiraRestApi\User\User;
 use JiraTempoApi\HttpClient\Formatter\PathFormatter;
 use JiraTempoApi\Repositories\Base\Repository;
 use JiraTempoApi\Repositories\RestApi\V3\JiraApi\Users;

@@ -60,6 +60,7 @@ class Users extends Repository
     {
         $queryParam = '?';
 
+        $first = true;
         foreach ($paramArray as $key => $value) {
             $v = null;
 
@@ -69,7 +70,9 @@ class Users extends Repository
                 $v = $value;
             }
 
-            $queryParam .= $key.'='.$v;
+            $prefix = !$first ? '&': '';
+            $queryParam .= sprintf('%s%s=%s', $prefix, $key,$v);
+            $first = false;
         }
 
         return $queryParam;

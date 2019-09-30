@@ -4,12 +4,20 @@ namespace JiraTempoApi\Domain\Model;
 
 class UserAccountIds
 {
-    /** @var array|UserAccountId[] */
+    /** @var UserAccountId[] */
     private $userAccountsIds;
 
     public function __construct($userAccountsIds = [])
     {
-        $this->userAccountsIds = $userAccountsIds;
+        if ($userAccountsIds === null) {
+            $userAccountsIds = [];
+        }
+        $this->userAccountsIds = array_map(
+            function ($object) {
+                return new UserAccountId((array)$object);
+            },
+            (array) $userAccountsIds
+        );
     }
 
     public static function create($userAccountsIds = [])
@@ -21,12 +29,7 @@ class UserAccountIds
     {
         reset($this->userAccountsIds);
 
-        return array_map(
-            function ($object) {
-                return new UserAccountId((array)$object);
-            },
-            $this->userAccountsIds
-        );
+        return $this->userAccountsIds;
     }
 
     public function getFirst()
@@ -37,7 +40,7 @@ class UserAccountIds
             return null;
         }
 
-        return new UserAccountId((array)$first);
+        return $first;
     }
 
     public function getLast()
@@ -47,6 +50,6 @@ class UserAccountIds
             return null;
         }
 
-        return new UserAccountId((array)$last);
+        return $last;
     }
 }

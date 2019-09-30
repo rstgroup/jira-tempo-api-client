@@ -2,12 +2,14 @@
 
 namespace JiraTempoApi\Clients;
 
+use JiraRestApi\Configuration\ConfigurationInterface;
 use JiraRestApi\JiraClient;
 use JiraTempoApi\HttpClient\Formatter\PathFormatter;
 use JiraTempoApi\Repositories\Base\Repository;
 use JiraTempoApi\Repositories\RestApi\V3\JiraApi\Users;
 use JsonMapper;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class JiraApiClient extends JiraClient
 {
@@ -16,6 +18,18 @@ class JiraApiClient extends JiraClient
 
     /** @var array|Repository[] */
     private $repositories = [];
+
+    public function __construct(
+        ConfigurationInterface $configuration = null,
+        LoggerInterface $logger = null,
+        $path = './',
+        $curlObject = null
+    ) {
+        parent::__construct($configuration, $logger, $path);
+        if ($curlObject !== null) {
+            $this->curl = $curlObject;
+        }
+    }
 
     /**
      * {@inheritDoc}

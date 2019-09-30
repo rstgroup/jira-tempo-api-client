@@ -1,4 +1,4 @@
-FROM sandrokeil/php:5.6-cli-xdebug
+FROM sandrokeil/php:5.6-cli
 
 RUN cd /tmp && curl -sS https://getcomposer.org/installer | php && \
     mv /tmp/composer.phar /usr/local/bin/composer && \
@@ -14,3 +14,10 @@ RUN apt-get -y install php-net-socket/oldoldstable && \
     docker-php-ext-install sockets
 
 WORKDIR /app
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
+RUN chmod +x /sbin/tini
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/bin/sh", "/docker-entrypoint.sh"]
+
+CMD ["composer"]

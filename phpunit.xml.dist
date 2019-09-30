@@ -31,6 +31,11 @@
     </filter>
 
     <php>
-<!--        <env name="" value=""/>-->
+        <env name="JIRA_HOST" value="https://your-jira.host.com" />
+        <env name="JIRA_USER" value="jira-username" />
+        <env name="JIRA_PASS" value="jira-password-OR-api-token" />
+        <env name="JIRA_REST_API_V3" value="true" />
+        <env name="JIRA_LOG_FILE" value="./var/logs/tests.log"/>
+        <env name="TEMPO_TOKEN" value="1231231231231231231" />
     </php>
 </phpunit>

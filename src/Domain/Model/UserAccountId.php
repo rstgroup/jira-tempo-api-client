@@ -2,6 +2,8 @@
 
 namespace JiraTempoApi\Domain\Model;
 
+use InvalidArgumentException;
+
 class UserAccountId
 {
     /** @var string */
@@ -12,6 +14,10 @@ class UserAccountId
 
     public function __construct($userAccountIdArray)
     {
+        if ($userAccountIdArray === null) {
+            throw new InvalidArgumentException('No user account id found');
+        }
+        $userAccountIdArray = (array) $userAccountIdArray;
         $this->username = isset($userAccountIdArray['username']) ? $userAccountIdArray['username'] : null;
         $this->accountId = isset($userAccountIdArray['accountId']) ? $userAccountIdArray['accountId'] : null;
     }

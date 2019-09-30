@@ -14,21 +14,19 @@ class Client
     /** @var string */
     private $basePath;
 
-    public function __construct($baseUri, $basePath = '', $headers = [])
+    public function __construct($baseUri, $basePath = '', $headers = [], $guzzleClient = null)
     {
         $this->basePath = $basePath;
-        $this->guzzleClient = new GuzzleClient(array_merge(
-            [
-                'base_uri' => UriFormatter::format($baseUri),
-                'headers' => $headers
-            ]
-        ));
+        $this->guzzleClient = $guzzleClient ?: new GuzzleClient(array_merge([
+            'base_uri' => UriFormatter::format($baseUri),
+            'headers' => $headers,
+        ]));
     }
 
     public function send(Request $request)
     {
         $headers = [
-            'headers' => $request->headers()
+            'headers' => $request->headers(),
         ];
 
         if ($request->hasBody()) {

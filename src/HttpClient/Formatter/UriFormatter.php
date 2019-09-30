@@ -5,10 +5,10 @@ namespace JiraTempoApi\HttpClient\Formatter;
 class UriFormatter
 {
     /** @return string */
-    public static function format($baseUri, $protocol='http')
+    public static function format($baseUri, $protocol = 'http')
     {
         if (strpos($baseUri, $protocol) > -1) {
-            $restPaths = explode(sprintf(':', $protocol), $baseUri);
+            $restPaths = explode(':', $baseUri);
             if(count($restPaths) > 1) {
                 $protocol = $restPaths[0];
                 $restPath = sprintf('%s', $restPaths[1]);

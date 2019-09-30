@@ -7,6 +7,8 @@ class UserWorklogs
     /** @var array */
     private $results;
 
+    private $issues;
+
     /** @return array */
     public function getResults()
     {
@@ -15,13 +17,17 @@ class UserWorklogs
 
     public function getIssues()
     {
-        $added_issues = [];
+        if($this->issues !== null || $this->issues === []){
+            return $this->issues;
+        }
+
+        $addedIssues = [];
         $filteredResults = array_filter(
             $this->results,
-            function ($result) use (&$added_issues) {
+            function ($result) use (&$addedIssues) {
                 $result = (object) $result;
-                if (isset($result->issue) && !isset($added_issues[$result->issue->key])) {
-                    $added_issues[$result->issue->key] = true;
+                if (isset($result->issue) && !isset($addedIssues[$result->issue->key])) {
+                    $addedIssues[$result->issue->key] = true;
                     return true;
                 };
 
@@ -29,12 +35,14 @@ class UserWorklogs
             }
         );
 
-        return array_map(
+        $this->issues = array_map(
             function ($result) {
                 $result = (object) $result;
                 return Issue::create($result->issue);
             },
             $filteredResults
         );
+
+        return $this->issues;
     }
 }

@@ -47,15 +47,30 @@ class Response
     public function toArray()
     {
         $json = new JSON();
-        return $json->decode($this->getBody());
+        return (array) $json->decode($this->getBody());
     }
 
     public function toObject($className)
     {
         $json = new JSON();
         $mapper = new JsonMapper();
+        $array = (array) $json->decode($this->getBody());
         $object = (object) $json->decode($this->getBody());
         $mapper->bIgnoreVisibility = true;
-        return $mapper->map($object, new $className());
+        return $mapper->map($object, new $className(...array_values($array)));
+    }
+
+    public function getException()
+    {
+        return $this->exception;
+    }
+
+    public function getCode()
+    {
+        if($this->response != null) {
+            return $this->response->getStatusCode();
+        }
+
+        return 500;
     }
 }

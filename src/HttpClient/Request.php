@@ -46,11 +46,6 @@ class Request
         $this->body = [];
     }
 
-    public static function create($basePath)
-    {
-        return new self($basePath);
-    }
-
     /** @return Request */
     public function head($path = '')
     {
@@ -166,9 +161,10 @@ class Request
 
     public function path($prefixPath = '')
     {
-        $restPath = PathFormatter::format(sprintf('/%s', $this->path));
+        $restPath = !empty($this->path) ? PathFormatter::format(sprintf('/%s', $this->path)): '';
         $prefixPath = PathFormatter::format(sprintf('/%s', $prefixPath));
-        return sprintf('%s%s%s', $prefixPath, $this->basePath, $restPath);
+        $path = sprintf('%s%s%s', $prefixPath, $this->basePath, $restPath);
+        return PathFormatter::format($path);
     }
 
     public function body()
@@ -178,7 +174,7 @@ class Request
 
     public function hasBody()
     {
-        return $this->body !== [];
+        return $this->body !== null && $this->body !== [];
     }
 
     public function parameters()

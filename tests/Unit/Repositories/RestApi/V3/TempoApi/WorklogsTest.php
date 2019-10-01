@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Repositories\RestApi\V3\TempoApi;
+namespace Tests\Unit\Repositories\RestApi\V3\TempoApi;
 
 use JiraRestApi\User\User;
 use JiraTempoApi\Clients\JiraApiClient;

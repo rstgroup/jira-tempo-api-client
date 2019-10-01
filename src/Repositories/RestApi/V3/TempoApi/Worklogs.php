@@ -17,6 +17,7 @@ use JiraTempoApi\Repositories\Base\TempoRepository;
 use KHerGe\JSON\Exception\DecodeException;
 use KHerGe\JSON\Exception\UnknownException;
 
+/** @see https://tempo-io.github.io/tempo-api-docs/#worklogs */
 class Worklogs extends TempoRepository
 {
     /** @var string */
@@ -47,7 +48,28 @@ class Worklogs extends TempoRepository
 
     /**
      * Creates a new worklog
-     * @param string $body
+     * @example {
+     *      "issueKey": "DUM-1",
+     *      "timeSpentSeconds": 3600,
+     *      "billableSeconds": 5200,
+     *      "startDate": "2017-02-06",
+     *      "startTime": "20:06:00",
+     *      "description": "Investigating a problem with our external database system", // optional depending on setting in Tempo Admin
+     *      "authorAccountId": "1111aaaa2222bbbb3333cccc",
+     *      "remainingEstimateSeconds": 7200, // optional depending on setting in Tempo Admin
+     *      "attributes": [
+     *          {
+     *              "key": "_EXTERNALREF_",
+     *              "value": "EXT-32548"
+     *          },
+     *          {
+     *              "key": "_COLOR_",
+     *              "value": "green"
+     *          }
+     *      ]
+     *  }
+     *
+     * @param array $body
      * @return Response
      */
     public function postWorklogs($body = [])
@@ -295,6 +317,10 @@ class Worklogs extends TempoRepository
                 $parameters
             )
         );
+
+        if (count($issueKeys) === 0) {
+            return [];
+        }
 
         return $this->getUserIssuesByFilter(
             [sprintf('key in (%s)', implode(',', $issueKeys))]

@@ -20,7 +20,7 @@ class UserWorklogs
     /** @return UserWorklog[] */
     public function getWorklogs()
     {
-        if($this->worklogs !== null || $this->issues === []){
+        if($this->worklogs !== null || $this->worklogs === []){
             return $this->worklogs;
         }
 

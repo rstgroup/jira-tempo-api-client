@@ -3,6 +3,7 @@
 namespace Tests\Unit\Domain\Model;
 
 use JiraTempoApi\Domain\Model\Issue;
+use JiraTempoApi\Domain\Model\UserWorklog;
 use JiraTempoApi\Domain\Model\UserWorklogs;
 use JiraTempoApi\HttpClient\Response;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -22,6 +23,8 @@ class UserWorklogsTest extends UnitTestCase
         $this->responseData = [
             'results' => [
                 [
+                    'billableSeconds' => 1234,
+                    'description' => 'Working on issue JIRA-1234',
                     'issue' => [
                         'key' => 'JIRA-1234',
                         'self' => 'http://jira.example.com/JIRA-1234',
@@ -29,6 +32,8 @@ class UserWorklogsTest extends UnitTestCase
                     ],
                 ],
                 [
+                    'billableSeconds' => 4567,
+                    'description' => 'Working on issue JIRA-4567',
                     'issue' => [
                         'key' => 'JIRA-4567',
                         'self' => 'http://jira.example.com/JIRA-4567',
@@ -36,6 +41,8 @@ class UserWorklogsTest extends UnitTestCase
                     ],
                 ],
                 [
+                    'billableSeconds' => 4567,
+                    'description' => 'Working on issue JIRA-4567',
                     'issue' => [
                         'key' => 'JIRA-4567',
                         'self' => 'http://jira.example.com/JIRA-4567',
@@ -85,5 +92,51 @@ class UserWorklogsTest extends UnitTestCase
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
         $issues = $workWorklogs->getIssues();
         $this->assertEquals($issues, $workWorklogs->getIssues());
+    }
+
+    /** @test */
+    public function thatGetWorklogsReturnsAllWorklogs()
+    {
+        /** @var UserWorklogs $workWorklogs */
+        $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
+        $worklogs = $workWorklogs->getWorklogs();
+        $this->assertCount(3, $worklogs);
+    }
+
+    /** @test */
+    public function thatGetWorklogsReturnsCachedResults()
+    {
+        /** @var UserWorklogs $workWorklogs */
+        $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
+        $worklogs = $workWorklogs->getWorklogs();
+        $this->assertEquals($worklogs, $workWorklogs->getWorklogs());
+    }
+
+    /** @test */
+    public function thatGetGroupedWorklogsByIssueReturnsWorklogsGropedByIssueKey()
+    {
+        /** @var UserWorklogs $workWorklogs */
+        $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
+        $worklogs = $workWorklogs->getGroupedWorklogsByIssues();
+
+        $this->assertCount(2, $worklogs);
+        $this->assertArrayHasKey('JIRA-1234', $worklogs);
+        $this->assertArrayHasKey('JIRA-4567', $worklogs);
+        $this->assertCount(2, $worklogs['JIRA-4567']);
+    }
+
+    /** @test */
+    public function thatReturnedWorklogsHasDescriptionAndTime()
+    {
+        /** @var UserWorklogs $workWorklogs */
+        $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
+        $worklogs = $workWorklogs->getGroupedWorklogsByIssues();
+
+        $this->assertArrayHasKey('JIRA-1234', $worklogs);
+        $issueWorklogs = $worklogs['JIRA-1234'];
+        /** @var UserWorklog $worklog */
+        $worklog = $issueWorklogs[0];
+        $this->assertEquals('Working on issue JIRA-1234', $worklog->getDescription());
+        $this->assertEquals(1234, $worklog->getTime());
     }
 }

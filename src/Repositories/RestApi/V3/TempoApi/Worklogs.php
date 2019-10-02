@@ -274,27 +274,31 @@ class Worklogs extends TempoRepository
      * @throws DecodeException
      * @throws UnknownException
      */
-    public function getAllIssuesByUser($username, $parameters = [])
+    public function getAllWorklogsByUser($username, $parameters = [])
     {
         $users = $this->jiraApiClient->getUsers();
         $userAccountIds = $users->getAccountIdsByUserNames([$username]);
         $userAccountId = UserAccountIds::create($userAccountIds)->getFirst();
 
         $worklogsResponse = $this->getAllWorklogsByUserAccountId($userAccountId->getAccountId(), $parameters);
-        /** @var UserWorklogs $worklogsResponseBody */
-        $worklogsResponseBody = $worklogsResponse->toObject(UserWorklogs::class);
+        /** @var UserWorklogs $userWorklogs */
+        $userWorklogs = $worklogsResponse->toObject(UserWorklogs::class);
 
-        return $worklogsResponseBody->getIssues();
+        return $userWorklogs;
     }
 
-    public function getAllIssuesKeysByUser($username, $parameters = [])
+    /**
+     * @param UserWorklogs $userWorklogs
+     * @return array
+     */
+    public function getAllIssuesKeysByUser($userWorklogs)
     {
         return array_unique(
             array_map(
                 function (Issue $issue) {
                     return $issue->getKey();
                 },
-                $this->getAllIssuesByUser($username, $parameters)
+                $userWorklogs->getIssues()
             )
         );
     }
@@ -309,12 +313,18 @@ class Worklogs extends TempoRepository
     }
 
 
-    public function getIssuesByKeysFromUserIssues($username, $parameters = [])
+    /**
+     * @param UserWorklogs $userWorklogs
+     * @return array|\JiraRestApi\Issue\Issue[]
+     * @throws DecodeException
+     * @throws JiraException
+     * @throws UnknownException
+     */
+    public function getIssuesByKeysFromUserIssues($userWorklogs)
     {
         $issueKeys = array_values(
             $this->getAllIssuesKeysByUser(
-                $username,
-                $parameters
+                $userWorklogs
             )
         );
 

@@ -9,3 +9,4 @@
 vendor/
 phpunit.xml
 var/logs
+tests/run.php

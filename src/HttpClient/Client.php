@@ -23,6 +23,21 @@ class Client
         ]));
     }
 
+    public function getBaseUri()
+    {
+        return $this->guzzleClient->getConfig('base_uri');
+    }
+
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    public function getFullBaseUri()
+    {
+        return UriFormatter::format(sprintf('%s/%s', $this->getBaseUri(), $this->getBasePath()));
+    }
+
     public function send(Request $request)
     {
         $headers = [

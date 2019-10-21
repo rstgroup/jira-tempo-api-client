@@ -10,7 +10,7 @@ RUN cd /tmp && curl https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
         chmod +x phpunit.phar && \
         mv /tmp/phpunit.phar /usr/local/bin/phpunit
 
-RUN apt-get -y install php-net-socket/oldoldstable && \
+RUN apt-get -y install php-net-socket/oldoldstable zip && \
     docker-php-ext-install sockets
 
 WORKDIR /app

@@ -7,7 +7,7 @@ use JiraTempoApi\HttpClient\Request;
 class RequestFactory
 {
     /** @return Request */
-    public static function startsWith($basePath)
+    public static function startsWith($basePath = '')
     {
         return new Request($basePath);
     }

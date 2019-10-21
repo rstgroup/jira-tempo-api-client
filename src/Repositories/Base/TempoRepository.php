@@ -11,7 +11,7 @@ abstract class TempoRepository extends Repository
     /** @var JiraApiClient */
     protected $jiraApiClient;
 
-    /** @var Client */
+    /** @var TempoApiClient */
     protected $tempoApiClient;
 
     public function __construct(JiraApiClient $jiraApiClient, TempoApiClient $tempoApiClient)

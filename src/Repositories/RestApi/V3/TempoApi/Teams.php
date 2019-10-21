@@ -4,6 +4,9 @@ namespace JiraTempoApi\Repositories\RestApi\V3\TempoApi;
 
 use JiraTempoApi\Clients\JiraApiClient;
 use JiraTempoApi\Clients\TempoApiClient;
+use JiraTempoApi\Domain\Model\MembersCollection;
+use JiraTempoApi\Domain\Model\TeamMembers;
+use JiraTempoApi\Domain\Model\TeamsCollection;
 use JiraTempoApi\HttpClient\Factory\RequestFactory;
 use JiraTempoApi\HttpClient\Request;
 use JiraTempoApi\HttpClient\Response;
@@ -188,4 +191,30 @@ class Teams extends TempoRepository
 
         return $this->tempoApiClient->send($request);
     }
+
+    /** ######## EXTENDED FEATURES ########## */
+
+    /**
+     * Retrieve all members by team key
+     */
+    public function getAllMembersBy($key)
+    {
+        $teams = $this->getTeams();
+
+        /** @var TeamsCollection $teamsCollection */
+        $teamsCollection = $teams->toObject(TeamsCollection::class);
+        $tempoTeam = $teamsCollection->getTeam($key);
+
+        /** @var TeamMembers $teamMembers */
+        $teamMembers = $tempoTeam->getMembers();
+        $link = str_replace($this->tempoApiClient->getFullBaseUri(), '/', $teamMembers->getSelf());
+        $request = RequestFactory::startsWith()->get($link);
+        $response = $this->tempoApiClient->send($request);
+
+        /** @var MembersCollection $members */
+        $members = $response->toObject(MembersCollection::class);
+
+        return $members->getMembersNames();
+    }
+
 }

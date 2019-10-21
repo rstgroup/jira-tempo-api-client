@@ -205,6 +205,10 @@ class Teams extends TempoRepository
         $teamsCollection = $teams->toObject(TeamsCollection::class);
         $tempoTeam = $teamsCollection->getTeam($key);
 
+        if ($tempoTeam === null) {
+            return [];
+        }
+
         /** @var TeamMembers $teamMembers */
         $teamMembers = $tempoTeam->getMembers();
         $link = str_replace($this->tempoApiClient->getFullBaseUri(), '/', $teamMembers->getSelf());

@@ -1,6 +1,4 @@
 # JiraTempoApiClient
-#### Work in progress...
-
 
 ## Requirements:
 

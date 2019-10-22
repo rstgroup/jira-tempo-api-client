@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Model;
 
@@ -8,7 +9,7 @@ use Tests\Unit\UnitTestCase;
 class IssueTest extends UnitTestCase
 {
     /** @test */
-    public function thatNewIssueObjectHasCorrectAttributes()
+    public function thatNewIssueObjectHasCorrectAttributes(): void
     {
         $issue = new Issue('http://tempo.page.io/core/v/3/', 'TASK-1234', 91203142);
 
@@ -17,7 +18,7 @@ class IssueTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatMethodCreateReturnsIssueCreatedFromArray()
+    public function thatMethodCreateReturnsIssueCreatedFromArray(): void
     {
         $issueArray = [
             'self' => 'http://tempo.page.io/core/v/3/',
@@ -31,7 +32,7 @@ class IssueTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatMethodCreateReturnsIssueCreatedFromStandardClassObject()
+    public function thatMethodCreateReturnsIssueCreatedFromStandardClassObject(): void
     {
         $issueArray = (object) [
             'self' => 'http://tempo.page.io/core/v/3/',

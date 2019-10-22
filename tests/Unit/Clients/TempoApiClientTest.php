@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Clients;
 
@@ -8,7 +9,7 @@ use Tests\Unit\UnitTestCase;
 class TempoApiClientTest extends UnitTestCase
 {
     /** @test */
-    public function thatCreateMethodReturnsNewClient()
+    public function thatCreateMethodReturnsNewClient(): void
     {
         $client = TempoApiClient::create();
 

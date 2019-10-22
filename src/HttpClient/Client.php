@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\HttpClient;
 
@@ -14,8 +15,12 @@ class Client
     /** @var string */
     private $basePath;
 
-    public function __construct($baseUri, $basePath = '', $headers = [], $guzzleClient = null)
-    {
+    public function __construct(
+        string $baseUri,
+        string $basePath = '',
+        array $headers = [],
+        ?GuzzleClient $guzzleClient = null
+    ) {
         $this->basePath = $basePath;
         $this->guzzleClient = $guzzleClient ?: new GuzzleClient(array_merge([
             'base_uri' => UriFormatter::format($baseUri),
@@ -23,22 +28,23 @@ class Client
         ]));
     }
 
+    /** @return array|mixed|object|null */
     public function getBaseUri()
     {
         return $this->guzzleClient->getConfig('base_uri');
     }
 
-    public function getBasePath()
+    public function getBasePath(): string
     {
         return $this->basePath;
     }
 
-    public function getFullBaseUri()
+    public function getFullBaseUri(): string
     {
         return UriFormatter::format(sprintf('%s/%s', $this->getBaseUri(), $this->getBasePath()));
     }
 
-    public function send(Request $request)
+    public function send(Request $request): Response
     {
         $headers = [
             'headers' => $request->headers(),

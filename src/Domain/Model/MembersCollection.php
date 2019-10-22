@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Domain\Model;
 
@@ -7,12 +8,12 @@ class MembersCollection
     /** @var array */
     private $results = [];
 
-    public function getResults()
+    public function getResults(): array
     {
         return $this->results;
     }
 
-    public function getMembersNames()
+    public function getMembersNames(): array
     {
         $membersNames = [];
         foreach ($this->results as $result) {

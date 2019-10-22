@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Repositories\RestApi\V3\JiraApi;
 
@@ -10,14 +11,14 @@ use Tests\Unit\UnitTestCase;
 class UsersTest extends UnitTestCase
 {
     /** @test */
-    public function thatResponseFromJiraApiClientContainsCorrectIdForUser()
+    public function thatResponseFromJiraApiClientContainsCorrectIdForUser(): void
     {
         $responseBody = json_encode([
             [
                 'username' => 'phpunit',
                 'accountId' => md5('phpunit'),
             ],
-        ]);
+        ], JSON_THROW_ON_ERROR, 512);
 
         $jiraApiClientMock = $this->createMock(JiraApiClient::class);
         $jiraApiClientMock

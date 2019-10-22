@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Model;
 
@@ -6,6 +7,7 @@ use JiraTempoApi\Domain\Model\Issue;
 use JiraTempoApi\Domain\Model\UserWorklog;
 use JiraTempoApi\Domain\Model\UserWorklogs;
 use JiraTempoApi\HttpClient\Response;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Unit\UnitTestCase;
 
@@ -14,10 +16,10 @@ class UserWorklogsTest extends UnitTestCase
     /** @var array */
     private $responseData;
 
-    /** @var Response|PHPUnit_Framework_MockObject_MockObject */
+    /** @var Response|MockObject */
     private $responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->responseData = [
@@ -58,11 +60,11 @@ class UserWorklogsTest extends UnitTestCase
 
         $this->responseMock
             ->method('getBody')
-            ->willReturn(json_encode($this->responseData));
+            ->willReturn(json_encode($this->responseData, JSON_THROW_ON_ERROR, 512));
     }
 
     /** @test */
-    public function whenResponseHasDuplicateIssuesThenUserWorklogsShouldReturnedIssuesWithoutDuplicates()
+    public function whenResponseHasDuplicateIssuesThenUserWorklogsShouldReturnedIssuesWithoutDuplicates(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -70,7 +72,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenResponseHasResultsThenAllResultsShouldBeReturned()
+    public function whenResponseHasResultsThenAllResultsShouldBeReturned(): void
     {
          /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -78,7 +80,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetIssuesReturnsIssuesObjects()
+    public function thatGetIssuesReturnsIssuesObjects(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -86,7 +88,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetIssuesReturnsCachedResults()
+    public function thatGetIssuesReturnsCachedResults(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -95,7 +97,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetWorklogsReturnsAllWorklogs()
+    public function thatGetWorklogsReturnsAllWorklogs(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -104,7 +106,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetWorklogsReturnsCachedResults()
+    public function thatGetWorklogsReturnsCachedResults(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -113,7 +115,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetGroupedWorklogsByIssueReturnsWorklogsGropedByIssueKey()
+    public function thatGetGroupedWorklogsByIssueReturnsWorklogsGropedByIssueKey(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);
@@ -126,7 +128,7 @@ class UserWorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatReturnedWorklogsHasDescriptionAndTime()
+    public function thatReturnedWorklogsHasDescriptionAndTime(): void
     {
         /** @var UserWorklogs $workWorklogs */
         $workWorklogs = $this->responseMock->toObject(UserWorklogs::class);

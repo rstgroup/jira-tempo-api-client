@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Repositories\RestApi\V3\JiraApi;
 
@@ -10,7 +11,7 @@ class MyPermissions extends JiraApiRepository
     protected $basePath = '/mypermissions';
 
 
-    public function getMyPermissions($permissions = [])
+    public function getMyPermissions(array $permissions = [])
     {
         $response = $this->jiraApiClient->exec(
             sprintf(

@@ -1,17 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\HttpClient\Formatter;
 
 class QueryParametersFormatter
 {
-    /**
-     * Convert to query array to http query parameter.
-     *
-     * @param $paramArray
-     *
-     * @return string
-     */
-    public static function toHttpQueryParameter($paramArray)
+    /** Convert to query array to http query parameter. */
+    public static function toHttpQueryParameter(array $paramArray): string
     {
         $queryParam = '?';
 

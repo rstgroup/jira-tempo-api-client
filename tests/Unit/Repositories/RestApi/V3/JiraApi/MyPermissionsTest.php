@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Repositories\RestApi\V3\JiraApi;
 
@@ -10,7 +11,7 @@ use Tests\Unit\UnitTestCase;
 class MyPermissionsTest extends UnitTestCase
 {
     /** @test */
-    public function thatMyPermissionsRequestReturnsExpectedResponse()
+    public function thatMyPermissionsRequestReturnsExpectedResponse(): void
     {
         $responseBody = json_encode([
             'permissions' =>
@@ -25,7 +26,7 @@ class MyPermissionsTest extends UnitTestCase
                             'havePermission' => true,
                         ],
                 ],
-        ]);
+        ], JSON_THROW_ON_ERROR, 512);
 
         $jiraApiClientMock = $this->createMock(JiraApiClient::class);
         $jiraApiClientMock

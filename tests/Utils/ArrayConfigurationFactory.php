@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Utils;
 
@@ -7,10 +8,10 @@ use JiraRestApi\Configuration\ArrayConfiguration;
 class ArrayConfigurationFactory
 {
     public static function create(
-        $host = null,
-        $user = null,
-        $password = null
-    ) {
+        string $host = null,
+        string $user = null,
+        string $password = null
+    ): ArrayConfiguration {
         return new ArrayConfiguration([
             'jiraHost' => $host ?: getenv('JIRA_HOST'),
             'jiraLogFile' => './../../var/logs/test.log',

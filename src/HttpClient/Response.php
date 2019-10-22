@@ -1,10 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\HttpClient;
 
 use Exception;
 use JiraTempoApi\Domain\Model\UserWorklogs;
 use JsonMapper;
+use JsonMapper_Exception;
+use KHerGe\JSON\Exception\DecodeException;
+use KHerGe\JSON\Exception\UnknownException;
 use KHerGe\JSON\JSON;
 use Psr\Http\Message\ResponseInterface;
 
@@ -19,7 +23,7 @@ class Response
     /** @var string */
     private $body;
 
-    public static function fromResponse(ResponseInterface $response)
+    public static function fromResponse(ResponseInterface $response): Response
     {
         $createdResponse = new self();
         $createdResponse->response = $response;
@@ -27,7 +31,7 @@ class Response
         return $createdResponse;
     }
 
-    public static function fromException(Exception $exception)
+    public static function fromException(Exception $exception): Response
     {
         $newResponse = new self();
         $newResponse->exception = $exception;
@@ -35,22 +39,22 @@ class Response
         return $newResponse;
     }
 
-    public function getBody()
+    public function getBody(): string
     {
-        if($this->response != null && $this->body === null) {
+        if($this->response !== null && $this->body === null) {
             $this->body = $this->response->getBody()->getContents();
         }
 
         return $this->body;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $json = new JSON();
         return (array) $json->decode($this->getBody());
     }
 
-    public function toObject($className)
+    public function toObject(string $className): object
     {
         $json = new JSON();
         $mapper = new JsonMapper();
@@ -60,14 +64,14 @@ class Response
         return $mapper->map($object, new $className(...array_values($array)));
     }
 
-    public function getException()
+    public function getException(): Exception
     {
         return $this->exception;
     }
 
-    public function getCode()
+    public function getCode(): int
     {
-        if($this->response != null) {
+        if($this->response !== null) {
             return $this->response->getStatusCode();
         }
 

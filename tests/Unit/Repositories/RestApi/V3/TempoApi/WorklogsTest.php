@@ -1,38 +1,37 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Repositories\RestApi\V3\TempoApi;
 
-use JiraRestApi\User\User;
 use JiraTempoApi\Clients\JiraApiClient;
 use JiraTempoApi\Clients\TempoApiClient;
 use JiraTempoApi\HttpClient\Request;
 use JiraTempoApi\HttpClient\Response;
 use JiraTempoApi\Repositories\RestApi\V3\JiraApi\Users;
 use JiraTempoApi\Repositories\RestApi\V3\TempoApi\Worklogs;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Tests\Unit\UnitTestCase;
-use function GuzzleHttp\Psr7\str;
 
 class WorklogsTest extends UnitTestCase
 {
-    /** @var JiraApiClient|PHPUnit_Framework_MockObject_MockObject */
+    /** @var JiraApiClient|MockObject */
     private $jiraApiClientMock;
 
-    /** @var TempoApiClient|PHPUnit_Framework_MockObject_MockObject */
+    /** @var TempoApiClient|MockObject */
     private $tempoApiClientMock;
 
-    /** @var StreamInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var StreamInterface|MockObject */
     private $streamInterfaceMock;
 
-    /** @var ResponseInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResponseInterface|MockObject */
     private $responseMock;
 
     /** @var array */
     private $worklogsResponse;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $usersMock = $this->createMock(Users::class);
@@ -154,17 +153,17 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetAllWorklogsReturnsListOfWorklogsWithGetMethod()
+    public function whenGetAllWorklogsReturnsListOfWorklogsWithGetMethod(): void
     {
         $body = [
             [
-                "self" => "https://api.tempo.io/core/3/worklogs?from=2017-02-01&to=2017-02-28&offset=0&limit=50",
-                "metadata" => [
-                    "count" => 18,
-                    "offset" => 0,
-                    "limit" => 50,
+                'self' => 'https://api.tempo.io/core/3/worklogs?from=2017-02-01&to=2017-02-28&offset=0&limit=50',
+                'metadata' => [
+                    'count' => 18,
+                    'offset' => 0,
+                    'limit' => 50,
                 ],
-                "results" => [
+                'results' => [
                     $this->worklogsResponse[0],
                 ],
 
@@ -173,7 +172,7 @@ class WorklogsTest extends UnitTestCase
         $actualResult = [];
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -189,16 +188,16 @@ class WorklogsTest extends UnitTestCase
 
         $this->assertEquals(Request::METHOD_GET, $actualResult['method']);
         $this->assertEquals([], $actualResult['parameters']);
-        $this->assertEquals(json_encode($body), $worklogs->getBody());
+        $this->assertEquals(json_encode($body, JSON_THROW_ON_ERROR, 512), $worklogs->getBody());
     }
 
     /** @test */
-    public function whenPostWorklogsCallThenReturnsNewWorklogAndRequestWasPostMethodWithEmptyBody()
+    public function whenPostWorklogsCallThenReturnsNewWorklogAndRequestWasPostMethodWithEmptyBody(): void
     {
         $body = $this->worklogsResponse[0];
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -213,17 +212,17 @@ class WorklogsTest extends UnitTestCase
         $worklogs = $worklogRepository->postWorklogs();
 
         $this->assertEquals(Request::METHOD_POST, $actualResult['method']);
-        $this->assertEquals(json_encode([]), $actualResult['body']);
-        $this->assertEquals(json_encode($body), $worklogs->getBody());
+        $this->assertEquals(json_encode([], JSON_THROW_ON_ERROR, 512), $actualResult['body']);
+        $this->assertEquals(json_encode($body, JSON_THROW_ON_ERROR, 512), $worklogs->getBody());
     }
 
     /** @test */
-    public function whenGetWorklogByIdPassedCorrectIdThenReturnsWorklogAndRequestHasGetMethodWithoutAnyQueryParameters()
+    public function whenGetWorklogByIdPassedCorrectIdThenReturnsWorklogAndRequestHasGetMethodWithoutAnyQueryParameters(): void
     {
         $body = $this->worklogsResponse[0];
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -239,16 +238,16 @@ class WorklogsTest extends UnitTestCase
 
         $this->assertEquals(Request::METHOD_GET, $actualResult['method']);
         $this->assertEquals([], $actualResult['parameters']);
-        $this->assertEquals(json_encode($body), $worklogs->getBody());
+        $this->assertEquals(json_encode($body, JSON_THROW_ON_ERROR, 512), $worklogs->getBody());
     }
 
     /** @test */
-    public function whenPutWorklogByIdPassedCorrectIdThenReturnsChangedWorkflowForPutMethodRequestAndEmptyBody()
+    public function whenPutWorklogByIdPassedCorrectIdThenReturnsChangedWorkflowForPutMethodRequestAndEmptyBody(): void
     {
         $body = $this->worklogsResponse[1];
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -269,12 +268,12 @@ class WorklogsTest extends UnitTestCase
 
 
     /** @test */
-    public function whenDeleteWorklogByIdPassedCorrectIdThenReturnsSuccessDelete()
+    public function whenDeleteWorklogByIdPassedCorrectIdThenReturnsSuccessDelete(): void
     {
         $body = [];
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $this->responseMock
             ->method('getStatusCode')
@@ -293,13 +292,13 @@ class WorklogsTest extends UnitTestCase
         $worklogs = $worklogRepository->deleteWorklogById('126');
 
         $this->assertEquals(Request::METHOD_DELETE, $actualResult['method']);
-        $this->assertEquals([], $actualResult['body']);
-        $this->assertEquals(json_encode($body), $worklogs->getBody());
+        $this->assertEquals('', $actualResult['body']);
+        $this->assertEquals(json_encode($body, JSON_THROW_ON_ERROR, 512), $worklogs->getBody());
         $this->assertEquals(204, $worklogs->getCode());
     }
 
     /** @test */
-    public function whenGetWorkAttributesValuesCallsThenRequestShouldBeGetAndHasWorkAttributeValuesPostfix()
+    public function whenGetWorkAttributesValuesCallsThenRequestShouldBeGetAndHasWorkAttributeValuesPostfix(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
@@ -322,11 +321,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetWorklogAttributeValuesByKeyShouldBeGetRequestWithCorrectPath()
+    public function whenGetWorklogAttributeValuesByKeyShouldBeGetRequestWithCorrectPath(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -345,11 +344,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetWorklogByJiraWorklogIdThenRequestShouldBeGetAndPrefixedPathWithJira()
+    public function whenGetWorklogByJiraWorklogIdThenRequestShouldBeGetAndPrefixedPathWithJira(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -368,11 +367,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetWorklogByJiraFilterIdThenRequestShouldBeGetAndPrefixedPathWithJiraFilter()
+    public function whenGetWorklogByJiraFilterIdThenRequestShouldBeGetAndPrefixedPathWithJiraFilter(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -391,11 +390,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetAllWorklogsByAccountKeyThenRequestShouldBeGetAndPrefixedPathWithAccount()
+    public function whenGetAllWorklogsByAccountKeyThenRequestShouldBeGetAndPrefixedPathWithAccount(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -414,11 +413,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetAllWorklogsByProjectKeyThenRequestShouldBeGetAndPrefixedPathWithProject()
+    public function whenGetAllWorklogsByProjectKeyThenRequestShouldBeGetAndPrefixedPathWithProject(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -437,11 +436,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetAllWorklogsByTeamIdThenRequestShouldBeGetAndPrefixedPathWithTeam()
+    public function whenGetAllWorklogsByTeamIdThenRequestShouldBeGetAndPrefixedPathWithTeam(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -460,11 +459,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetAllWorklogsByUserAccountIdThenRequestShouldBeGetAndPrefixedPathWithUser()
+    public function whenGetAllWorklogsByUserAccountIdThenRequestShouldBeGetAndPrefixedPathWithUser(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())
@@ -483,11 +482,11 @@ class WorklogsTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetAllWorklogsByIssueKeyThenRequestShouldBeGetAndPrefixedPathWithIssue()
+    public function whenGetAllWorklogsByIssueKeyThenRequestShouldBeGetAndPrefixedPathWithIssue(): void
     {
         $this->streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $this->tempoApiClientMock
             ->expects($this->once())

@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Clients;
 
 use JiraRestApi\Configuration\ConfigurationInterface;
 use JiraRestApi\JiraClient;
+use JiraRestApi\JiraException;
 use JiraTempoApi\HttpClient\Formatter\PathFormatter;
 use JiraTempoApi\Repositories\Base\Repository;
 use JiraTempoApi\Repositories\RestApi\V3\JiraApi\Users;
@@ -19,10 +21,14 @@ class JiraApiClient extends JiraClient
     /** @var array|Repository[] */
     private $repositories = [];
 
+    /**
+     * @param resource|null $curlObject
+     * @throws JiraException
+     */
     public function __construct(
         ConfigurationInterface $configuration = null,
         LoggerInterface $logger = null,
-        $path = './',
+        string $path = './',
         $curlObject = null
     ) {
         parent::__construct($configuration, $logger, $path);
@@ -34,14 +40,13 @@ class JiraApiClient extends JiraClient
     /**
      * {@inheritDoc}
      */
-    public function exec($context, $post_data = null, $custom_request = null, $cookieFile = null)
+    public function exec($context, $post_data = null, $custom_request = null, $cookieFile = null): string
     {
         $path = sprintf('%s/%s', $this->baseUri, $context);
         return parent::exec(PathFormatter::format($path), $post_data, $custom_request, $cookieFile);
     }
 
-    /** @return Users */
-    public function getUsers()
+    public function getUsers(): Users
     {
         if (isset($this->repositories['users'])) {
             return $this->repositories['users'];
@@ -51,14 +56,12 @@ class JiraApiClient extends JiraClient
         return $this->repositories['users'];
     }
 
-    /** @return Logger */
-    public function getLog()
+    public function getLog(): Logger
     {
         return $this->log;
     }
 
-    /** @return JsonMapper */
-    public function getJsonMapper()
+    public function getJsonMapper(): JsonMapper
     {
         return $this->json_mapper;
     }

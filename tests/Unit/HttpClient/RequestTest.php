@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\HttpClient;
 
@@ -9,14 +10,14 @@ use Tests\Unit\UnitTestCase;
 class RequestTest extends UnitTestCase
 {
     /** @test */
-    public function whenRequestHasUsersResourceAndAddPrefixCoreThenShouldReturnCoreUsersPath()
+    public function whenRequestHasUsersResourceAndAddPrefixCoreThenShouldReturnCoreUsersPath(): void
     {
         $request = RequestFactory::startsWith('/users');
         $this->assertEquals('/core/users', $request->path('/core'));
     }
 
     /** @test */
-    public function whenHeadMethodHasListParameterThenPathShouldBeUserList()
+    public function whenHeadMethodHasListParameterThenPathShouldBeUserList(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->head('list');
@@ -25,7 +26,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetMethodHasListParameterThenPathShouldBeUserList()
+    public function whenGetMethodHasListParameterThenPathShouldBeUserList(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->get('list');
@@ -34,7 +35,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPostMethodIsJsonThenReturnedPathShouldBeUsersJson()
+    public function whenPostMethodIsJsonThenReturnedPathShouldBeUsersJson(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->post('json');
@@ -43,7 +44,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPutMethodIsJsonThenReturnedPathShouldBeUsersJson()
+    public function whenPutMethodIsJsonThenReturnedPathShouldBeUsersJson(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->put('json');
@@ -52,7 +53,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPatchMethodIsObjectThenReturnedPathShouldBeUsersObject()
+    public function whenPatchMethodIsObjectThenReturnedPathShouldBeUsersObject(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->patch('object');
@@ -61,7 +62,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenDeleteMethodIsObjectThenReturnedPathShouldBeUsersObject()
+    public function whenDeleteMethodIsObjectThenReturnedPathShouldBeUsersObject(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->delete('object');
@@ -70,7 +71,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPurgeMethodIsJsonThenReturnedPathShouldBeUsersJson()
+    public function whenPurgeMethodIsJsonThenReturnedPathShouldBeUsersJson(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->purge('json');
@@ -79,7 +80,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenOptionsMethodIsJsonThenReturnedPathShouldBeUsersJson()
+    public function whenOptionsMethodIsJsonThenReturnedPathShouldBeUsersJson(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->options('json');
@@ -88,7 +89,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenTraceMethodIsObjectThenReturnedPathShouldBeUsersObject()
+    public function whenTraceMethodIsObjectThenReturnedPathShouldBeUsersObject(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->trace('object');
@@ -97,7 +98,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenConnectMethodIsObjectThenReturnedPathShouldBeUsersObject()
+    public function whenConnectMethodIsObjectThenReturnedPathShouldBeUsersObject(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->connect('object');
@@ -106,11 +107,11 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetRequestPassedWithParametersThenShouldBeReturnsByMethodParameters()
+    public function whenGetRequestPassedWithParametersThenShouldBeReturnsByMethodParameters(): void
     {
         $parameters = [
             'username' => 'phpunit',
-            'filterId' => md5('jira-1234')
+            'filterId' => md5('jira-1234'),
         ];
         $request = RequestFactory::startsWith('/users')
             ->get('/list')
@@ -120,7 +121,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetRequestHasNoParametersThenReturnsEmptyParametersArray()
+    public function whenGetRequestHasNoParametersThenReturnsEmptyParametersArray(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->get('/list');
@@ -129,19 +130,19 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetRequestHasParametersThenMethodHasParametersShouldReturnTrue()
+    public function whenGetRequestHasParametersThenMethodHasParametersShouldReturnTrue(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->get('object')
             ->withParameters([
-                'username' => 'phpunit'
+                'username' => 'phpunit',
             ]);
 
         $this->assertTrue($request->hasParameters());
     }
 
     /** @test */
-    public function whenGetRequestHasNoParametersThenMethodHasParametersShouldReturnFale()
+    public function whenGetRequestHasNoParametersThenMethodHasParametersShouldReturnFale(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->get('object');
@@ -150,12 +151,16 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPostRequestWithBodyThenReturnsFromMethodBody()
+    public function whenPostRequestWithBodyThenReturnsFromMethodBody(): void
     {
-        $body = json_encode([
-            'username' => 'phpunit',
-            'filterId' => md5('phpunit')
-        ]);
+        $body = json_encode(
+            [
+                'username' => 'phpunit',
+                'filterId' => md5('phpunit'),
+            ],
+            JSON_THROW_ON_ERROR,
+            512
+        );
         $request = RequestFactory::startsWith('/users')
             ->post('/json')
             ->withBody($body);
@@ -164,39 +169,39 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPostRequestWithJsonBodyThenReturnsFromMethodBody()
+    public function whenPostRequestWithJsonBodyThenReturnsFromMethodBody(): void
     {
         $body = [
             'username' => 'phpunit',
-            'filterId' => md5('phpunit')
+            'filterId' => md5('phpunit'),
         ];
         $request = RequestFactory::startsWith('/users')
             ->post('/json')
             ->withJsonBody($body);
 
-        $this->assertEquals($body, (array) json_decode($request->body()));
+        $this->assertEquals($body, (array) json_decode($request->body(), true, 512, JSON_THROW_ON_ERROR));
     }
 
     /** @test */
-    public function whenPutHasBodyThenMethodHasBodyReturnsTrue()
+    public function whenPutHasBodyThenMethodHasBodyReturnsTrue(): void
     {
         $body = [
             'username' => 'phpunit',
-            'filterId' => md5('phpunit')
+            'filterId' => md5('phpunit'),
         ];
         $request = RequestFactory::startsWith('/users')
             ->put('/json')
-            ->withBody($body);
+            ->withJsonBody($body);
 
         $this->assertTrue($request->hasBody());
     }
 
     /** @test */
-    public function whenPostHasJsonBodyThenMethodHasBodyReturnsTrue()
+    public function whenPostHasJsonBodyThenMethodHasBodyReturnsTrue(): void
     {
         $body = [
             'username' => 'phpunit',
-            'filterId' => md5('phpunit')
+            'filterId' => md5('phpunit'),
         ];
         $request = RequestFactory::startsWith('/users')
             ->post('/json')
@@ -206,7 +211,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPutHasNoBodyThenMethodHasBodyReturnsFalse()
+    public function whenPutHasNoBodyThenMethodHasBodyReturnsFalse(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->put('/json');
@@ -215,7 +220,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenHeadThenMethodShouldBeSetToHead()
+    public function whenHeadThenMethodShouldBeSetToHead(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->head('list');
@@ -224,7 +229,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenGetThenMethodShouldBeSetToGet()
+    public function whenGetThenMethodShouldBeSetToGet(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->get('list');
@@ -233,7 +238,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPostThenMethodShouldBeSetToPost()
+    public function whenPostThenMethodShouldBeSetToPost(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->post('json');
@@ -242,7 +247,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPutThenMethodShouldBeSetToPut()
+    public function whenPutThenMethodShouldBeSetToPut(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->put('json');
@@ -251,7 +256,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPatchThenMethodShouldBeSetToPatch()
+    public function whenPatchThenMethodShouldBeSetToPatch(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->patch('object');
@@ -260,7 +265,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenDeleteThenMethodShouldBeSetToDelete()
+    public function whenDeleteThenMethodShouldBeSetToDelete(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->delete('object');
@@ -268,7 +273,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenPurgeThenMethodShouldBeSetToPurge()
+    public function whenPurgeThenMethodShouldBeSetToPurge(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->purge('json');
@@ -277,7 +282,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenOptionsThenMethodShouldBeSetToOptions()
+    public function whenOptionsThenMethodShouldBeSetToOptions(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->options('json');
@@ -286,7 +291,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenTraceThenMethodShouldBeSetToTrace()
+    public function whenTraceThenMethodShouldBeSetToTrace(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->trace('object');
@@ -295,7 +300,7 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenConnectThenMethodShouldBeSetToConnect()
+    public function whenConnectThenMethodShouldBeSetToConnect(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->connect('object');
@@ -304,23 +309,23 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenHeadRequestWithHeaderThenReturnsPassedHeader()
+    public function whenHeadRequestWithHeaderThenReturnsPassedHeader(): void
     {
         $request = RequestFactory::startsWith('/users')
             ->head('object')
             ->withHeader('X-AUTH-TOKEN', md5('TOKEN'));
 
         $expected = [
-            'X-AUTH-TOKEN' => md5('TOKEN')
+            'X-AUTH-TOKEN' => md5('TOKEN'),
         ];
         $this->assertEquals($expected, $request->headers());
     }
 
     /** @test */
-    public function whenHeadRequestWithHeadersThenExpectsShouldBeTheSameAsPassed()
+    public function whenHeadRequestWithHeadersThenExpectsShouldBeTheSameAsPassed(): void
     {
         $headers = [
-            'X-AUTH-TOKEN' => md5('TOKEN')
+            'X-AUTH-TOKEN' => md5('TOKEN'),
         ];
         $request = RequestFactory::startsWith('/users')
             ->head('object')
@@ -330,17 +335,17 @@ class RequestTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenHeadRequestHasHeadersAndNewHeadersSetThenReturnsAllHeaders()
+    public function whenHeadRequestHasHeadersAndNewHeadersSetThenReturnsAllHeaders(): void
     {
         $headers = [
             'X-AUTH-TOKEN' => md5('TOKEN'),
-            'X-APPLICATION-TOKEN' => md5('JIRA_TOKEN')
+            'X-APPLICATION-TOKEN' => md5('JIRA_TOKEN'),
         ];
         $request = RequestFactory::startsWith('/users')
             ->head('object')
             ->withHeader('X-AUTH-TOKEN', md5('TOKEN'))
             ->withHeaders([
-                'X-APPLICATION-TOKEN' => md5('JIRA_TOKEN')
+                'X-APPLICATION-TOKEN' => md5('JIRA_TOKEN'),
             ]);
 
         $this->assertEquals($headers, $request->headers());

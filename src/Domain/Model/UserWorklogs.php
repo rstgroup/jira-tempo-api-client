@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Domain\Model;
 
@@ -7,29 +8,32 @@ class UserWorklogs
     /** @var array */
     private $results;
 
+    /** @var Issue[] */
     private $issues;
 
+    /** @var UserWorklog[] */
     private $worklogs;
 
     /** @return array */
-    public function getResults()
+    public function getResults(): array
     {
         return $this->results;
     }
 
     /** @return UserWorklog[] */
-    public function getWorklogs()
+    public function getWorklogs(): array
     {
         if($this->worklogs !== null || $this->worklogs === []){
             return $this->worklogs;
         }
 
         $this->worklogs = array_map(
-            function ($result) use (&$addedIssues) {
+            static function ($result) {
                 $result = (object) $result;
                 $key = $result->issue->key;
                 $description = $result->description;
                 $time = $result->billableSeconds ?: $result->timeSpentSeconds;
+
                 return new UserWorklog($key, $description, $time);
             },
             $this->results
@@ -38,7 +42,7 @@ class UserWorklogs
         return $this->worklogs;
     }
 
-    public function getGroupedWorklogsByIssues()
+    public function getGroupedWorklogsByIssues(): array
     {
         $groupedWorklogs = [];
         $worklogs = $this->getWorklogs();
@@ -63,7 +67,7 @@ class UserWorklogs
     }
 
     /** @return Issue[] */
-    public function getIssues()
+    public function getIssues(): array
     {
         if($this->issues !== null || $this->issues === []){
             return $this->issues;
@@ -72,7 +76,7 @@ class UserWorklogs
         $addedIssues = [];
         $filteredResults = array_filter(
             $this->results,
-            function ($result) use (&$addedIssues) {
+            static function ($result) use (&$addedIssues) {
                 $result = (object) $result;
                 $key = $result->issue->key;
                 if (isset($result->issue) && !isset($addedIssues[$key])) {
@@ -85,7 +89,7 @@ class UserWorklogs
         );
 
         $this->issues = array_map(
-            function ($result) {
+            static function ($result) {
                 $result = (object) $result;
                 return Issue::create($result->issue);
             },

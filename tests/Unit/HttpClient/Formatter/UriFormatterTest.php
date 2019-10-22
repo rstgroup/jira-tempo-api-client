@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\HttpClient\Formatter;
 
@@ -8,31 +9,31 @@ use Tests\Unit\UnitTestCase;
 class UriFormatterTest extends UnitTestCase
 {
     /** @test */
-    public function whenHostWasDefinedWithoutHttpThenFormatterShouldPrefixUriWithHttpProtocol()
+    public function whenHostWasDefinedWithoutHttpThenFormatterShouldPrefixUriWithHttpProtocol(): void
     {
         $this->assertEquals('http://localhost', UriFormatter::format('localhost'));
     }
 
     /** @test */
-    public function whenBaseUriWithoutHttpProtocolAndHasSlashThenFormatterShouldCleanUpUriToCorrectForm()
+    public function whenBaseUriWithoutHttpProtocolAndHasSlashThenFormatterShouldCleanUpUriToCorrectForm(): void
     {
         $this->assertEquals('http://localhost', UriFormatter::format('/localhost'));
     }
 
     /** @test */
-    public function whenBaseUriHasHttpsProtocolThenUriShouldBeTheSameAsBaseUri()
+    public function whenBaseUriHasHttpsProtocolThenUriShouldBeTheSameAsBaseUri(): void
     {
         $this->assertEquals('https://localhost', UriFormatter::format('https://localhost'));
     }
 
     /** @test */
-    public function whenBaseUriHasHttpProtocolThenUriShouldBeTheSameAsBaseUri()
+    public function whenBaseUriHasHttpProtocolThenUriShouldBeTheSameAsBaseUri(): void
     {
         $this->assertEquals('http://localhost', UriFormatter::format('http://localhost'));
     }
 
     /** @test */
-    public function whenBaseUriHasIncorrectDoublesSlashesThenFormatterReturnsCorrectForm()
+    public function whenBaseUriHasIncorrectDoublesSlashesThenFormatterReturnsCorrectForm(): void
     {
         $this->assertEquals(
             'http://localhost/a/b/c',
@@ -41,7 +42,7 @@ class UriFormatterTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenBaseUriHasIncorrectFormatThenFormatterReturnsCorrectUri()
+    public function whenBaseUriHasIncorrectFormatThenFormatterReturnsCorrectUri(): void
     {
         $this->assertEquals(
             'http://localhost/a/b/c',
@@ -50,7 +51,7 @@ class UriFormatterTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenBaseUriProtocolHasMoreThenOneSlashesThenFormatterReturnsCorrectUri()
+    public function whenBaseUriProtocolHasMoreThenOneSlashesThenFormatterReturnsCorrectUri(): void
     {
         $this->assertEquals(
             'http://localhost/a/b/c',
@@ -59,7 +60,7 @@ class UriFormatterTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenBaseUriHasEmptyPathThenReturnsBaseUri()
+    public function whenBaseUriHasEmptyPathThenReturnsBaseUri(): void
     {
         $this->assertEquals(
             'http://',
@@ -68,13 +69,13 @@ class UriFormatterTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenBaseUriHasOnlyProtocolThenUriReturnsPassedProtocol()
+    public function whenBaseUriHasOnlyProtocolThenUriReturnsPassedProtocol(): void
     {
         $this->assertEquals('http', UriFormatter::format('http'));
     }
 
     /** @test */
-    public function whenBaseUriHasOnlyHttpsProtocolThenUriReturnsHttps()
+    public function whenBaseUriHasOnlyHttpsProtocolThenUriReturnsHttps(): void
     {
         $this->assertEquals('https', UriFormatter::format('https'));
     }

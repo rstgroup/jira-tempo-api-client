@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use donatj\MockWebServer\MockWebServer;
 use phpmock\phpunit\PHPMock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UnitTestCase extends TestCase
@@ -12,14 +13,14 @@ class UnitTestCase extends TestCase
 
     protected $namespace;
 
-    protected function setNamespace($namespace = null)
+    protected function setNamespace(string $namespace = null): UnitTestCase
     {
         $this->namespace = $namespace ?: __NAMESPACE__;
 
         return $this;
     }
 
-    protected function mockFunction($functionName)
+    protected function mockFunction(string $functionName): MockObject
     {
         return $this->getFunctionMock($this->namespace, $functionName);
     }

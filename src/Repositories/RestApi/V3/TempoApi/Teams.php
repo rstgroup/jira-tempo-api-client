@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Repositories\RestApi\V3\TempoApi;
 
@@ -27,11 +28,8 @@ class Teams extends TempoRepository
         $this->request = RequestFactory::startsWith($this->basePath);
     }
 
-    /**
-     * Retrieve all teams
-     * @return Response
-     */
-    public function getTeams()
+    /** Retrieve all teams */
+    public function getTeams(): Response
     {
         $request = $this->request
             ->get();
@@ -43,9 +41,6 @@ class Teams extends TempoRepository
      * Creates a new team
      * Media type application/json
      * @see https://tempo-io.github.io/tempo-api-docs/#teams
-     * @param array $body
-     * @return Response
-     *
      * @example {
      *   "name": "Team-A",
      *   "summary": "This is the A team",
@@ -53,7 +48,7 @@ class Teams extends TempoRepository
      *   "programId": 42
      *  }
      **/
-    public function postTeams($body = [])
+    public function postTeams(array $body = []): Response
     {
         $request = $this->request
             ->post()
@@ -64,11 +59,9 @@ class Teams extends TempoRepository
 
     /**
      * Retrieve an existing team for the given id
-     * @param string $id
-     * @return Response
      * @see https://tempo-io.github.io/tempo-api-docs/#teams
      */
-    public function getTeam($id)
+    public function getTeam(string $id): Response
     {
         $request = $this->request
             ->get($id);
@@ -76,11 +69,7 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Update an existing team for the given id
-     * @param $id
-     * @param array $body
-     * @return Response
+    /** Update an existing team for the given id
      * @example {
      *   "name": "Team-A",
      *   "summary": "This is the A team",
@@ -88,7 +77,7 @@ class Teams extends TempoRepository
      *   "programId": 42
      *  }
      */
-    public function putTeam($id, $body = [])
+    public function putTeam(string $id, array $body = []): Response
     {
         $request = $this->request
             ->put($id)
@@ -97,12 +86,8 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Delete an existing team
-     * @param $id
-     * @return Response
-     */
-    public function deleteTeam($id)
+    /** Delete an existing team */
+    public function deleteTeam(string $id): Response
     {
         $request = $this->request
             ->delete($id);
@@ -110,12 +95,8 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all the links for this team
-     * @param $id
-     * @return Response
-     */
-    public function getLinks($id)
+    /** Retrieve all the links for this team */
+    public function getLinks(string $id): Response
     {
         $request = $this->request
             ->get(sprintf('%s/links', $id));
@@ -123,12 +104,8 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all the members for this team with their active membership
-     * @param $id
-     * @return Response
-     */
-    public function getMembers($id)
+    /** Retrieve all the members for this team with their active membership */
+    public function getMembers(string $id): Response
     {
         $request = $this->request
             ->get(sprintf('%s/members', $id));
@@ -136,13 +113,8 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve the member's active membership for this team
-     * @param $id
-     * @param $accountId
-     * @return Response
-     */
-    public function getMemberByTeamIdAndAccountId($id, $accountId)
+    /** Retrieve the member's active membership for this team */
+    public function getMemberByTeamIdAndAccountId(string $id, string $accountId): Response
     {
         $request = $this->request
             ->get(sprintf('%s/members/%s', $id, $accountId));
@@ -151,13 +123,8 @@ class Teams extends TempoRepository
 
     }
 
-    /**
-     * Retrieve member's memberships for this team
-     * @param $id
-     * @param $accountId
-     * @return Response
-     */
-    public function getMembershipByTeamIdAndAccountId($id, $accountId)
+    /** Retrieve member's memberships for this team */
+    public function getMembershipByTeamIdAndAccountId(string $id, string $accountId): Response
     {
         $request = $this->request
             ->get(sprintf('%s/members/%s/memberships', $id, $accountId));
@@ -165,12 +132,8 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all the permissions for this team
-     * @param $id
-     * @return Response
-     */
-    public function getPermissions($id)
+    /** Retrieve all the permissions for this team */
+    public function getPermissions(string $id): Response
     {
         $request = $this->request
             ->get(sprintf('%s/permissions', $id));
@@ -178,13 +141,8 @@ class Teams extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve a specific permission belonging to the team
-     * @param $id
-     * @param $key
-     * @return Response
-     */
-    public function getPermissionsByKey($id, $key)
+    /** Retrieve a specific permission belonging to the team  */
+    public function getPermissionsByKey(string $id, string $key): Response
     {
         $request = $this->request
             ->get(sprintf('%s/permissions/%s', $id, $key));
@@ -194,10 +152,8 @@ class Teams extends TempoRepository
 
     /** ######## EXTENDED FEATURES ########## */
 
-    /**
-     * Retrieve all members by team key
-     */
-    public function getAllMembersBy($key)
+    /** Retrieve all members by team key */
+    public function getAllMembersBy(string $key): array
     {
         $teams = $this->getTeams();
 

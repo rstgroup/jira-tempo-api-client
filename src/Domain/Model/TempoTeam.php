@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Domain\Model;
 
 use JiraTempoApi\Domain\Abstraction\HyperLinked;
+use stdClass;
 
 class TempoTeam extends HyperLinked
 {
@@ -30,12 +32,12 @@ class TempoTeam extends HyperLinked
     /** @var TeamPermissions */
     private $permissions;
 
-    public static function createFromObject($tempoTeamObject)
+    public static function createFromObject(stdClass $tempoTeamObject): HyperLinked
     {
         $tempoTeam = parent::create($tempoTeamObject);
-        $tempoTeam->id = isset($tempoTeamObject->id) ? $tempoTeamObject->id : 0;
-        $tempoTeam->name = isset($tempoTeamObject->name) ? $tempoTeamObject->name : '';
-        $tempoTeam->summary = isset($tempoTeamObject->summary) ? $tempoTeamObject->summary : '';
+        $tempoTeam->id = $tempoTeamObject->id ?? 0;
+        $tempoTeam->name = $tempoTeamObject->name ?? '';
+        $tempoTeam->summary = $tempoTeamObject->summary ?? '';
         $tempoTeam->lead = isset($tempoTeamObject->lead) ? TempoLead::createFromObject($tempoTeamObject->lead) : null;
         $tempoTeam->program = isset($tempoTeamObject->program) ? TeamProgram::createFromObject($tempoTeamObject->program) : null;
         $tempoTeam->links = isset($tempoTeamObject->links) ? TeamSelfLinks::createFromObject($tempoTeamObject->links) : null;
@@ -45,43 +47,42 @@ class TempoTeam extends HyperLinked
         return $tempoTeam;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->summary;
     }
 
-    public function getLead()
+    public function getLead(): TempoLead
     {
         return $this->lead;
     }
 
-    public function getProgram()
+    public function getProgram(): TeamProgram
     {
         return $this->program;
     }
 
-    public function getLinks()
+    public function getLinks(): TeamSelfLinks
     {
         return $this->links;
     }
 
-    /** @return TeamMembers */
-    public function getMembers()
+    public function getMembers(): TeamMembers
     {
         return $this->members;
     }
 
-    public function getPermissions()
+    public function getPermissions(): TeamPermissions
     {
         return $this->permissions;
     }

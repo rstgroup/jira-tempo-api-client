@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\HttpClient\Formatter;
 
 class PathFormatter
 {
-    /** @return string */
-    public static function format($path)
+    public static function format(string $path): string
     {
         return preg_replace('~/+~', '/', $path);
     }

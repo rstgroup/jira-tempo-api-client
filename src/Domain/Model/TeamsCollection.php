@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Domain\Model;
 
@@ -7,13 +8,12 @@ class TeamsCollection
     /** @var array */
     private $results;
 
-    /** @return array */
-    public function getResults()
+    public function getResults(): array
     {
         return $this->results;
     }
 
-    public function getTeam($teamName)
+    public function getTeam(string $teamName): ?TempoTeam
     {
         foreach ($this->results as $result) {
             $tempoTeam = TempoTeam::createFromObject($result);

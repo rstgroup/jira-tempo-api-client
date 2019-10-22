@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\HttpClient;
 
@@ -18,7 +19,7 @@ use Tests\Unit\UnitTestCase;
 class ClientTest extends UnitTestCase
 {
     /** @test */
-    public function whenClientSendRequestByGuzzleClientThenResponseShouldHaveReturnedBody()
+    public function whenClientSendRequestByGuzzleClientThenResponseShouldHaveReturnedBody(): void
     {
         $responseBody = [
             'message' => 'empty.data'
@@ -26,7 +27,7 @@ class ClientTest extends UnitTestCase
         $streamInterfaceMock = $this->createMock(StreamInterface::class);
         $streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($responseBody));
+            ->willReturn(json_encode($responseBody, JSON_THROW_ON_ERROR, 512));
 
         $responseMock = $this->createMock(GuzzleResponse::class);
         $responseMock
@@ -54,7 +55,7 @@ class ClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenClientSendPostRequestByGuzzleClientThenRequestHasCorrectMethodPathAndBody()
+    public function whenClientSendPostRequestByGuzzleClientThenRequestHasCorrectMethodPathAndBody(): void
     {
         $requestBody = ['username' => 'phpunit'];
         $requestArray = [
@@ -87,11 +88,14 @@ class ClientTest extends UnitTestCase
 
         $this->assertEquals($requestArray['method'], Request::METHOD_POST);
         $this->assertEquals($requestArray['path'], '/core/3/issues/new');
-        $this->assertEquals($requestArray['headers']['body'], json_encode($requestBody));
+        $this->assertEquals(
+            $requestArray['headers']['body'],
+            json_encode($requestBody, JSON_THROW_ON_ERROR, 512)
+        );
     }
 
     /** @test */
-    public function whenClientSendGetRequestWithParametersThenRequestShouldHaveCorrectParamters()
+    public function whenClientSendGetRequestWithParametersThenRequestShouldHaveCorrectParamters(): void
     {
         $requestParameters = ['username' => 'phpunit'];
         $requestArray = [
@@ -129,7 +133,7 @@ class ClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenClientSendGetRequestAndGuzzleResponseFailsThenResponseWithExceptionShouldBeCreated()
+    public function whenClientSendGetRequestAndGuzzleResponseFailsThenResponseWithExceptionShouldBeCreated(): void
     {
         $requestParameters = ['username' => 'phpunit'];
         $requestArray = [
@@ -156,7 +160,7 @@ class ClientTest extends UnitTestCase
                 $streamInterfaceMock = $this->createMock(StreamInterface::class);
                 $streamInterfaceMock
                     ->method('getContents')
-                    ->willReturn(json_encode(['message'=> 'not.found']));
+                    ->willReturn(json_encode(['message' => 'not.found'], JSON_THROW_ON_ERROR, 512));
                 $responseInterfaceMock
                     ->method('getBody')
                     ->willReturn($streamInterfaceMock);

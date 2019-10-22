@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Domain\Model;
 
@@ -12,21 +13,21 @@ class TempoLead extends HyperLinked
     /** @var string */
     private $displayName;
 
-    public static function createFromObject($lead)
+    public static function createFromObject(object $lead): HyperLinked
     {
         $tempoLead = parent::create($lead);
-        $tempoLead->accountId = isset($lead->accountId) ? $lead->accountId : '';
-        $tempoLead->displayName = isset($lead->displayName) ? $lead->displayName : '';
+        $tempoLead->accountId = $lead->accountId ?? '';
+        $tempoLead->displayName = $lead->displayName ?? '';
 
         return $tempoLead;
     }
 
-    public function getAccountId()
+    public function getAccountId(): string
     {
         return $this->accountId;
     }
 
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return $this->displayName;
     }

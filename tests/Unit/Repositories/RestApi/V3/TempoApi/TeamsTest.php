@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Repositories\RestApi\V3\TempoApi;
 
@@ -8,27 +9,26 @@ use JiraTempoApi\HttpClient\Request;
 use JiraTempoApi\HttpClient\Response;
 use JiraTempoApi\Repositories\RestApi\V3\JiraApi\Users;
 use JiraTempoApi\Repositories\RestApi\V3\TempoApi\Teams;
-use JiraTempoApi\Repositories\RestApi\V3\TempoApi\Worklogs;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Tests\Unit\UnitTestCase;
 
 class TeamsTest extends UnitTestCase
 {
-    /** @var StreamInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var StreamInterface|MockObject */
     private $streamInterfaceMock;
 
-    /** @var TempoApiClient|PHPUnit_Framework_MockObject_MockObject */
+    /** @var TempoApiClient|MockObject */
     private $tempoApiClientMock;
 
-    /** @var ResponseInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResponseInterface|MockObject */
     private $responseMock;
 
-    /** @var JiraApiClient|PHPUnit_Framework_MockObject_MockObject */
+    /** @var JiraApiClient|MockObject */
     private $jiraApiClientMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $usersMock = $this->createMock(Users::class);
@@ -61,7 +61,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetTeamsRequestMethodIsGetAndPathIsTeams()
+    public function thatGetTeamsRequestMethodIsGetAndPathIsTeams(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -81,7 +81,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatPostTeamsRequestMethodIsPostAndPathIsTeams()
+    public function thatPostTeamsRequestMethodIsPostAndPathIsTeams(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -103,7 +103,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetTeamByIdRequestMethodIsGetAndPathIsTeamsWithId()
+    public function thatGetTeamByIdRequestMethodIsGetAndPathIsTeamsWithId(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -123,7 +123,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatPutTeamByIdRequestMethodIsPutAndPathIsTeamsWithId()
+    public function thatPutTeamByIdRequestMethodIsPutAndPathIsTeamsWithId(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -145,7 +145,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatDeleteTeamByIdRequestMethodIsDeleteAndPathIsTeamsWithId()
+    public function thatDeleteTeamByIdRequestMethodIsDeleteAndPathIsTeamsWithId(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -165,7 +165,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetLinksRequestMethodIsGetAndPathIsTeamsWithIdAndLinks()
+    public function thatGetLinksRequestMethodIsGetAndPathIsTeamsWithIdAndLinks(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -185,7 +185,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetMembersRequestMethodIsGetAndPathIsTeamsWithIdAndMembers()
+    public function thatGetMembersRequestMethodIsGetAndPathIsTeamsWithIdAndMembers(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -205,7 +205,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetMemberByTeamIdAndAccountIdRequestMethodIsGetAndPathHasIdMembersAndAccountId()
+    public function thatGetMemberByTeamIdAndAccountIdRequestMethodIsGetAndPathHasIdMembersAndAccountId(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -225,7 +225,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetMembershipByTeamIdAndAccountIdRequestMethodIsGetAndPathHasIdMembersAccountIdMemberships()
+    public function thatGetMembershipByTeamIdAndAccountIdRequestMethodIsGetAndPathHasIdMembersAccountIdMemberships(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -248,7 +248,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetPermissionsRequestMethodIsGetAndPathHasIdWithPermissions()
+    public function thatGetPermissionsRequestMethodIsGetAndPathHasIdWithPermissions(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock
@@ -268,7 +268,7 @@ class TeamsTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetPermissionsByKeyRequestMethodIsGetAndPathHasIdWithPermissionsAndKey()
+    public function thatGetPermissionsByKeyRequestMethodIsGetAndPathHasIdWithPermissionsAndKey(): void
     {
         $actualResult = [];
         $this->tempoApiClientMock

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Model;
 
@@ -11,7 +12,7 @@ class UserAccountIdTest extends UnitTestCase
 {
 
     /** @test */
-    public function whenUserAccountIdHasNoUsernameAndAccountIdThenObjectHasNullProperties()
+    public function whenUserAccountIdHasNoUsernameAndAccountIdThenObjectHasNullProperties(): void
     {
         $userAccountId = new UserAccountId([]);
         $this->assertNull($userAccountId->getUsername());
@@ -19,7 +20,7 @@ class UserAccountIdTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenUserAccountIdHasOnlyUsernameThenOnlyUsernameShouldReturnsValue()
+    public function whenUserAccountIdHasOnlyUsernameThenOnlyUsernameShouldReturnsValue(): void
     {
         $userAccountId = new UserAccountId([
             'username' => 'username'
@@ -29,7 +30,7 @@ class UserAccountIdTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenUserAccountIdHasOnlyAccountIdThenOnlyAccountIdShouldReturnsValue()
+    public function whenUserAccountIdHasOnlyAccountIdThenOnlyAccountIdShouldReturnsValue(): void
     {
         $userAccountId = new UserAccountId([
             'accountId' => md5('accountId')
@@ -39,7 +40,7 @@ class UserAccountIdTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenUserAccountIdHasAllParametersThenBothParametersShouldHaveValue()
+    public function whenUserAccountIdHasAllParametersThenBothParametersShouldHaveValue(): void
     {
         $userAccountId = new UserAccountId([
             'username' => 'username',
@@ -50,7 +51,7 @@ class UserAccountIdTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenUserAccountIdHasNoAnyArrayThenThrowsAnException()
+    public function whenUserAccountIdHasNoAnyArrayThenThrowsAnException(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -58,9 +59,9 @@ class UserAccountIdTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenUserAccountIdHasStandardClassObjectThenObjectShouldCreated()
+    public function whenUserAccountIdHasStandardClassObjectThenObjectShouldCreated(): void
     {
-        $userAccountId = new UserAccountId((object) ['username' => 'username', 'accountId' => md5('accountId')]);
+        $userAccountId = new UserAccountId(['username' => 'username', 'accountId' => md5('accountId')]);
 
         $this->assertEquals('username', $userAccountId->getUsername());
         $this->assertEquals(md5('accountId'), $userAccountId->getAccountId());

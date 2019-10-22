@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\HttpClient\Formatter;
 
@@ -11,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 class QueryParametersFormatterTest extends TestCase
 {
     /** @test */
-    public function toHttpQueryParameterMethodShouldReturnHttpEncodedUrl()
+    public function toHttpQueryParameterMethodShouldReturnHttpEncodedUrl(): void
     {
         $httpEncodedParameters = QueryParametersFormatter::toHttpQueryParameter([
             'username' => 'phpunit',
@@ -25,7 +26,7 @@ class QueryParametersFormatterTest extends TestCase
     }
 
     /** @test */
-    public function toHttpQueryParameterMethodShouldReturnAllDefinedParametersAsFlattenChain()
+    public function toHttpQueryParameterMethodShouldReturnAllDefinedParametersAsFlattenChain(): void
     {
         $httpEncodedParameters = QueryParametersFormatter::toHttpQueryParameter([
             'username' => ['phpunit', 'test', 'mock'],

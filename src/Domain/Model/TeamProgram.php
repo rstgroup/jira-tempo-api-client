@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Domain\Model;
 
@@ -12,21 +13,21 @@ class TeamProgram extends HyperLinked
     /** @var string */
     private $name;
 
-    public static function createFromObject($program)
+    public static function createFromObject(object $program): HyperLinked
     {
         $tempoProgram = parent::create($program);
-        $tempoProgram->id = isset($program->id) ? $program->id : 0;
-        $tempoProgram->name = isset($program->name) ? $program->name : '';
+        $tempoProgram->id = $program->id ?? 0;
+        $tempoProgram->name = $program->name ?? '';
 
         return $tempoProgram;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

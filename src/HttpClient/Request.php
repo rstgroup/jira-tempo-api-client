@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\HttpClient;
 
@@ -8,16 +9,16 @@ use KHerGe\JSON\JSON;
 class Request
 {
     /** @see  https://github.com/symfony/symfony/blob/4.3/src/Symfony/Component/HttpFoundation/Request.php */
-    const METHOD_HEAD = 'HEAD';
-    const METHOD_GET = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT = 'PUT';
-    const METHOD_PATCH = 'PATCH';
-    const METHOD_DELETE = 'DELETE';
-    const METHOD_PURGE = 'PURGE';
-    const METHOD_OPTIONS = 'OPTIONS';
-    const METHOD_TRACE = 'TRACE';
-    const METHOD_CONNECT = 'CONNECT';
+    public const METHOD_HEAD = 'HEAD';
+    public const METHOD_GET = 'GET';
+    public const METHOD_POST = 'POST';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_PATCH = 'PATCH';
+    public const METHOD_DELETE = 'DELETE';
+    public const METHOD_PURGE = 'PURGE';
+    public const METHOD_OPTIONS = 'OPTIONS';
+    public const METHOD_TRACE = 'TRACE';
+    public const METHOD_CONNECT = 'CONNECT';
 
     /** @var string */
     private $basePath;
@@ -34,7 +35,7 @@ class Request
     /** @var array|string[] */
     private $parameters;
 
-    /** @var array|string[] */
+    /** @var string */
     private $body;
 
     public function __construct($basePath)
@@ -43,70 +44,70 @@ class Request
         $this->method = self::METHOD_GET;
         $this->headers = [];
         $this->parameters = [];
-        $this->body = [];
+        $this->body = '';
     }
 
     /** @return Request */
-    public function head($path = '')
+    public function head($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_HEAD, $path);
     }
 
     /** @return Request */
-    public function get($path = '')
+    public function get($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_GET, $path);
     }
 
     /** @return Request */
-    public function post($path = '')
+    public function post($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_POST, $path);
     }
 
     /** @return Request */
-    public function put($path = '')
+    public function put($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_PUT, $path);
     }
 
     /** @return Request */
-    public function patch($path = '')
+    public function patch($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_PATCH, $path);
     }
 
     /** @return Request */
-    public function delete($path = '')
+    public function delete($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_DELETE, $path);
     }
 
     /** @return Request */
-    public function purge($path = '')
+    public function purge($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_PURGE, $path);
     }
 
     /** @return Request */
-    public function options($path = '')
+    public function options($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_OPTIONS, $path);
     }
 
     /** @return Request */
-    public function trace($path = '')
+    public function trace($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_TRACE, $path);
     }
 
     /** @return Request */
-    public function connect($path = '')
+    public function connect($path = ''): Request
     {
         return $this->httpMethod(self::METHOD_CONNECT, $path);
     }
 
-    private function httpMethod($method, $path = '')
+    private function httpMethod($method, $path = ''): Request
     {
         $request = clone $this;
         $request->method = $method;
@@ -118,21 +119,21 @@ class Request
     /** @param array|string[] $parameters
      * @return Request
      */
-    public function withParameters($parameters = [])
+    public function withParameters(array $parameters = []): Request
     {
         $this->parameters = $parameters;
 
         return $this;
     }
 
-    public function withBody($body)
+    public function withBody(string $body): Request
     {
         $this->body = $body;
 
         return $this;
     }
 
-    public function withJsonBody($body = [])
+    public function withJsonBody(array $body = []): Request
     {
         $json = new JSON();
         $this->body = $json->encode($body);
@@ -140,26 +141,26 @@ class Request
         return $this;
     }
 
-    public function withHeader($key, $value)
+    public function withHeader($key, $value): Request
     {
         $this->headers[$key] = $value;
 
         return $this;
     }
 
-    public function withHeaders($headers = [])
+    public function withHeaders($headers = []): Request
     {
         $this->headers = array_merge($this->headers, $headers);
 
         return $this;
     }
 
-    public function method()
+    public function method(): string
     {
         return $this->method;
     }
 
-    public function path($prefixPath = '')
+    public function path(string $prefixPath = ''): string
     {
         $restPath = !empty($this->path) ? PathFormatter::format(sprintf('/%s', $this->path)): '';
         $prefixPath = PathFormatter::format(sprintf('/%s', $prefixPath));
@@ -167,27 +168,27 @@ class Request
         return PathFormatter::format($path);
     }
 
-    public function body()
+    public function body(): string
     {
         return $this->body;
     }
 
-    public function hasBody()
+    public function hasBody(): bool
     {
-        return $this->body !== null && $this->body !== [];
+        return $this->body !== null && $this->body !== '';
     }
 
-    public function parameters()
+    public function parameters(): array
     {
         return $this->parameters;
     }
 
-    public function hasParameters()
+    public function hasParameters(): bool
     {
         return $this->parameters !== [];
     }
 
-    public function headers()
+    public function headers(): array
     {
         return $this->headers;
     }

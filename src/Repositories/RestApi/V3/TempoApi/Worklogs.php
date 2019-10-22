@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Repositories\RestApi\V3\TempoApi;
 
 use Exception;
 use JiraRestApi\Issue\IssueService;
+use JiraRestApi\Issue\IssueV3;
 use JiraRestApi\JiraException;
 use JiraTempoApi\Clients\JiraApiClient;
 use JiraTempoApi\Clients\TempoApiClient;
@@ -14,6 +16,7 @@ use JiraTempoApi\HttpClient\Factory\RequestFactory;
 use JiraTempoApi\HttpClient\Request;
 use JiraTempoApi\HttpClient\Response;
 use JiraTempoApi\Repositories\Base\TempoRepository;
+use JsonMapper_Exception;
 use KHerGe\JSON\Exception\DecodeException;
 use KHerGe\JSON\Exception\UnknownException;
 
@@ -35,9 +38,8 @@ class Worklogs extends TempoRepository
     /**
      * Retrieve worklogs
      * @param array|string[] $parameters
-     * @return Response
      */
-    public function getWorklogs($parameters = [])
+    public function getWorklogs(array $parameters = []): Response
     {
         $request = $this->request
             ->get()
@@ -69,10 +71,8 @@ class Worklogs extends TempoRepository
      *      ]
      *  }
      *
-     * @param array $body
-     * @return Response
      */
-    public function postWorklogs($body = [])
+    public function postWorklogs(array $body = []): Response
     {
         $request = $this->request
             ->post()
@@ -81,12 +81,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve an existing worklog for the given id
-     * @param string $worklogId
-     * @return Exception|Response
-     */
-    public function getWorklogById($worklogId)
+    /** Retrieve an existing worklog for the given id */
+    public function getWorklogById(string $worklogId): Response
     {
         $request = $this->request
             ->get($worklogId);
@@ -94,12 +90,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     *
-     * @param string $worklogId
-     * @return Exception|Response
-     */
-    public function putWorklogById($worklogId, $body = [])
+    /** */
+    public function putWorklogById(string $worklogId, array $body = []): Response
     {
         $request = $this->request
             ->put($worklogId)
@@ -108,12 +100,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     *
-     * @param string $worklogId
-     * @return Exception|Response
-     */
-    public function deleteWorklogById($worklogId)
+    /** */
+    public function deleteWorklogById(string $worklogId): Response
     {
         $request = $this->request
             ->delete($worklogId);
@@ -121,12 +109,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all work attribute values for the worklog
-     * @param string $worklogId
-     * @return Exception|Response
-     */
-    public function getWorkAttributesValues($worklogId)
+    /** Retrieve all work attribute values for the worklog */
+    public function getWorkAttributesValues(string $worklogId): Response
     {
         $request = $this->request
             ->get(
@@ -136,13 +120,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve a specific work attribute value for the worklog
-     * @param string $worklogId
-     * @param string $key
-     * @return Exception|Response
-     */
-    public function getWorkAttributesValuesByKey($worklogId, $key)
+    /** Retrieve a specific work attribute value for the worklog */
+    public function getWorkAttributesValuesByKey(string $worklogId, string $key): Response
     {
         $request = $this->request
             ->get(
@@ -152,12 +131,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve an existing worklog for the given JIRA worklog id
-     * @param string $jiraWorklogId
-     * @return Exception|Response
-     */
-    public function getWorklogByJiraWorklogId($jiraWorklogId)
+    /** Retrieve an existing worklog for the given JIRA worklog id */
+    public function getWorklogByJiraWorklogId(string $jiraWorklogId): Response
     {
         $request = $this->request
             ->get(
@@ -167,12 +142,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve worklogs associated to the given JIRA filter id
-     * @param string $jirafilterId
-     * @return Exception|Response
-     */
-    public function getWorklogByJiraFilterId($jiraFilterId, $parameters = [])
+    /** Retrieve worklogs associated to the given JIRA filter id */
+    public function getWorklogByJiraFilterId(string $jiraFilterId, array $parameters = []): Response
     {
         $request = $this->request
             ->get(
@@ -183,12 +154,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all worklogs associated to the given account key
-     * @param string $accountKey
-     * @return Exception|Response
-     */
-    public function getAllWorklogsByAccountKey($accountKey, $parameters = [])
+    /** Retrieve all worklogs associated to the given account key */
+    public function getAllWorklogsByAccountKey(string $accountKey, array $parameters = []): Response
     {
         $request = $this->request
             ->get(
@@ -199,12 +166,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all worklogs associated to the given account key
-     * @param string $projectKey
-     * @return Exception|Response
-     */
-    public function getAllWorklogsByProjectKey($projectKey, $parameters = [])
+    /** Retrieve all worklogs associated to the given account key */
+    public function getAllWorklogsByProjectKey(string $projectKey, array $parameters = []): Response
     {
         $request = $this->request
             ->get(
@@ -215,12 +178,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all worklogs associated to the given team id
-     * @param string $teamId
-     * @return Exception|Response
-     */
-    public function getAllWorklogsByTeamId($teamId, $parameters = [])
+    /** Retrieve all worklogs associated to the given team id */
+    public function getAllWorklogsByTeamId(string $teamId, array $parameters = []): Response
     {
         $request = $this->request
             ->get(
@@ -231,12 +190,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all worklogs associated to the given user
-     * @param string $accountId
-     * @return Exception|Response
-     */
-    public function getAllWorklogsByUserAccountId($accountId, $parameters = [])
+    /** Retrieve all worklogs associated to the given user */
+    public function getAllWorklogsByUserAccountId(string $accountId, array $parameters = []): Response
     {
         $request = $this->request
             ->get(
@@ -247,12 +202,8 @@ class Worklogs extends TempoRepository
         return $this->tempoApiClient->send($request);
     }
 
-    /**
-     * Retrieve all worklogs associated to the given user
-     * @param string $issueKey
-     * @return Exception|Response
-     */
-    public function getAllWorklogsByIssueKey($issueKey, $parameters = [])
+    /** Retrieve all worklogs associated to the given user */
+    public function getAllWorklogsByIssueKey(string $issueKey, array $parameters = []): Response
     {
         $request = $this->request
             ->get(
@@ -267,14 +218,11 @@ class Worklogs extends TempoRepository
 
     /**
      * Retrieve all issue associated to the given user
-     * @param string $username
-     * @param array $parameters
-     * @return
      * @throws JiraException
      * @throws DecodeException
      * @throws UnknownException
      */
-    public function getAllWorklogsByUser($username, $parameters = [])
+    public function getAllWorklogsByUser(string $username, array $parameters = []): UserWorklogs
     {
         $users = $this->jiraApiClient->getUsers();
         $userAccountIds = $users->getAccountIdsByUserNames([$username]);
@@ -288,14 +236,13 @@ class Worklogs extends TempoRepository
     }
 
     /**
-     * @param UserWorklogs $userWorklogs
-     * @return array
+     * @return string[]
      */
-    public function getAllIssuesKeysByUser($userWorklogs)
+    public function getAllIssuesKeysByUser(UserWorklogs $userWorklogs): array
     {
         return array_unique(
             array_map(
-                function (Issue $issue) {
+                static function (Issue $issue) {
                     return $issue->getKey();
                 },
                 $userWorklogs->getIssues()
@@ -303,7 +250,12 @@ class Worklogs extends TempoRepository
         );
     }
 
-    public function getUserIssuesByFilter($jqlToJoinByAnd = [])
+    /**
+     * @return IssueV3[]|Issue[]
+     * @throws JiraException
+     * @throws JsonMapper_Exception
+     */
+    public function getUserIssuesByFilter(array $jqlToJoinByAnd = []): array
     {
         $issueService = new IssueService();
         $jql = implode(' AND ', $jqlToJoinByAnd);
@@ -315,12 +267,11 @@ class Worklogs extends TempoRepository
 
     /**
      * @param UserWorklogs $userWorklogs
-     * @return array|\JiraRestApi\Issue\Issue[]
-     * @throws DecodeException
+     * @return IssueV3[]|Issue[]
      * @throws JiraException
-     * @throws UnknownException
+     * @throws JsonMapper_Exception
      */
-    public function getIssuesByKeysFromUserIssues($userWorklogs)
+    public function getIssuesByKeysFromUserIssues(UserWorklogs $userWorklogs): array
     {
         $issueKeys = array_values(
             $this->getAllIssuesKeysByUser(

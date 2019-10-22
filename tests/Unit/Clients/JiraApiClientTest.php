@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Clients;
 
@@ -12,28 +13,23 @@ use Tests\Utils\ArrayConfigurationFactory;
 
 class JiraApiClientTest extends UnitTestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     /** @test */
-    public function thatJiraApiClientBuildsVersion3ApiPathWithHost()
+    public function thatJiraApiClientBuildsVersion3ApiPathWithHost(): void
     {
         $curl = curl_init();
 
         $this->setNamespace('JiraRestApi');
         $this
             ->mockFunction('curl_init')
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
             ->willReturn($curl);
         $this
             ->mockFunction('curl_exec')
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
             ->willReturn('something');
         $this
             ->mockFunction('curl_getinfo')
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
             ->willReturn(200);
 
         $jiraApiClient = new JiraApiClient(
@@ -48,18 +44,18 @@ class JiraApiClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatJiraApiClientUsedInjectingCurlObject()
+    public function thatJiraApiClientUsedInjectingCurlObject(): void
     {
         $curl = curl_init();
 
         $this->setNamespace('JiraRestApi');
         $this
             ->mockFunction('curl_exec')
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
             ->willReturn('something');
         $this
             ->mockFunction('curl_getinfo')
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
             ->willReturn(200);
 
         $jiraApiClient = new JiraApiClient(
@@ -77,7 +73,7 @@ class JiraApiClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatMethodGetUsersReturnsUsersJiraRepository()
+    public function thatMethodGetUsersReturnsUsersJiraRepository(): void
     {
         $jiraApiClient = new JiraApiClient();
 
@@ -85,7 +81,7 @@ class JiraApiClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatMethodGetUsersReturnsCashedRepository()
+    public function thatMethodGetUsersReturnsCashedRepository(): void
     {
         $jiraApiClient = new JiraApiClient();
         $users = $jiraApiClient->getUsers();
@@ -95,7 +91,7 @@ class JiraApiClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatMethodGetJsonMapperReturnsJsonMapper()
+    public function thatMethodGetJsonMapperReturnsJsonMapper(): void
     {
         $jiraApiClient = new JiraApiClient();
 
@@ -103,7 +99,7 @@ class JiraApiClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatGetLogReturnsLogger()
+    public function thatGetLogReturnsLogger(): void
     {
         $jiraApiClient = new JiraApiClient();
 
@@ -111,16 +107,14 @@ class JiraApiClientTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenJiraHostIsNotDefinedThatThrowException()
+    public function whenJiraHostIsNotDefinedThatThrowException(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('JIRA_HOST');
         $this->expectExceptionMessage('JIRA_USER');
         $this->expectExceptionMessage('JIRA_PASS');
 
-        unset($_ENV['JIRA_HOST']);
-        unset($_ENV['JIRA_USER']);
-        unset($_ENV['JIRA_PASS']);
+        unset($_ENV['JIRA_HOST'], $_ENV['JIRA_USER'], $_ENV['JIRA_PASS']);
 
         $this
             ->setNamespace('Dotenv\Environment\Adapter')

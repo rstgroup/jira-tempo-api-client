@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\HttpClient;
 
@@ -13,7 +14,7 @@ class ResponseTest extends UnitTestCase
 {
 
     /** @test */
-    public function thatCreateResponseFromResponseInterfaceReturnsNewResponseObject()
+    public function thatCreateResponseFromResponseInterfaceReturnsNewResponseObject(): void
     {
         $responseInterfaceMock = $this->createMock(ResponseInterface::class);
         $response = Response::fromResponse($responseInterfaceMock);
@@ -22,7 +23,7 @@ class ResponseTest extends UnitTestCase
     }
 
     /** @test */
-    public function thatCreateResponseFromExceptionReturnsNewResponseObject()
+    public function thatCreateResponseFromExceptionReturnsNewResponseObject(): void
     {
         $exception = $this->createMock(Exception::class);
         $response = Response::fromException($exception);
@@ -31,7 +32,7 @@ class ResponseTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenSourceResponseHasBodyWithContentsThenGetBodyReturnsPassedBody()
+    public function whenSourceResponseHasBodyWithContentsThenGetBodyReturnsPassedBody(): void
     {
         $body = [
             'message' => 'this.is.body',
@@ -39,7 +40,7 @@ class ResponseTest extends UnitTestCase
         $streamInterfaceMock = $this->createMock(StreamInterface::class);
         $streamInterfaceMock
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $responseInterfaceMock = $this->createMock(ResponseInterface::class);
         $responseInterfaceMock
@@ -47,11 +48,11 @@ class ResponseTest extends UnitTestCase
             ->willReturn($streamInterfaceMock);
 
         $response = Response::fromResponse($responseInterfaceMock);
-        $this->assertEquals(json_encode($body), $response->getBody());
+        $this->assertEquals(json_encode($body, JSON_THROW_ON_ERROR, 512), $response->getBody());
     }
 
     /** @test */
-    public function whenResponseHasBodyThenGetBodyReturnsFirstTimePassedBody()
+    public function whenResponseHasBodyThenGetBodyReturnsFirstTimePassedBody(): void
     {
         $body = [
             'message' => 'this.is.body',
@@ -60,7 +61,7 @@ class ResponseTest extends UnitTestCase
         $streamInterfaceMock
             ->expects($this->once())
             ->method('getContents')
-            ->willReturn(json_encode($body));
+            ->willReturn(json_encode($body, JSON_THROW_ON_ERROR, 512));
 
         $responseInterfaceMock = $this->createMock(ResponseInterface::class);
         $responseInterfaceMock
@@ -69,11 +70,11 @@ class ResponseTest extends UnitTestCase
 
         $response = Response::fromResponse($responseInterfaceMock);
         $response->getBody();
-        $this->assertEquals(json_encode($body), $response->getBody());
+        $this->assertEquals(json_encode($body, JSON_THROW_ON_ERROR, 512), $response->getBody());
     }
 
     /** @test */
-    public function whenResponseBodyIsSetThenToArrayMethodReturnsAnArray()
+    public function whenResponseBodyIsSetThenToArrayMethodReturnsAnArray(): void
     {
         $body = [
             'message' => 'this.is.body',
@@ -95,7 +96,7 @@ class ResponseTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenResponseHasBodyThanToObjectMethodReturnsObjectInstanceOfPassedClass()
+    public function whenResponseHasBodyThanToObjectMethodReturnsObjectInstanceOfPassedClass(): void
     {
         $responseData = [
             'key' => 'JIRA-1234',
@@ -109,7 +110,7 @@ class ResponseTest extends UnitTestCase
 
         $responseMock
             ->method('getBody')
-            ->willReturn(json_encode($responseData));
+            ->willReturn(json_encode($responseData, JSON_THROW_ON_ERROR, 512));
 
         $issue = $responseMock->toObject(Issue::class);
 
@@ -117,7 +118,7 @@ class ResponseTest extends UnitTestCase
     }
 
     /** @test */
-    public function whenNoResponseThenCodeShouldBe500()
+    public function whenNoResponseThenCodeShouldBe500(): void
     {
         $responseMock = $this->createPartialMock(Response::class, [
             'getBody',
@@ -125,7 +126,7 @@ class ResponseTest extends UnitTestCase
 
         $responseMock
             ->method('getBody')
-            ->willReturn(json_encode([]));
+            ->willReturn(json_encode([], JSON_THROW_ON_ERROR, 512));
 
         $response = Response::fromException(new Exception());
 

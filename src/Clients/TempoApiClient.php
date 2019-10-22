@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\Clients;
 
@@ -6,8 +7,7 @@ use JiraTempoApi\HttpClient\Client;
 
 class TempoApiClient extends Client
 {
-    /** @return TempoApiClient */
-    public static function create()
+    public static function create(): TempoApiClient
     {
         return new self(
             'https://api.tempo.io/',

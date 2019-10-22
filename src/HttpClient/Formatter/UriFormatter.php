@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace JiraTempoApi\HttpClient\Formatter;
 
 class UriFormatter
 {
     /** @return string */
-    public static function format($baseUri, $protocol = 'http')
+    public static function format(string $baseUri, string $protocol = 'http'): string
     {
         if (strpos($baseUri, $protocol) > -1) {
             $restPaths = explode(':', $baseUri);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\HttpClient\Factory;
 
@@ -8,7 +9,7 @@ use Tests\Unit\UnitTestCase;
 class RequestFactoryTest extends UnitTestCase
 {
     /** @test */
-    public function createRequestWhichStartsWithPassedPath()
+    public function createRequestWhichStartsWithPassedPath(): void
     {
         $request = RequestFactory::startsWith('/base/path');
         $this->assertEquals('/base/path', $request->path());

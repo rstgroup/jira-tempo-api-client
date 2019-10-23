@@ -4,7 +4,7 @@
   "type": "library",
   "description": "PHP Library - Jira and Tempo API (Current version V3)",
   "keywords": ["jira", "tempo", "api", "rest", "php", "library"],
-  "version": "1.0.0",
+  "version": "7.3.9",
   "authors": [
     {
       "name": "Michał Ligus",

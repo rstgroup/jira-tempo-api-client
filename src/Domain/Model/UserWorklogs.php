@@ -36,7 +36,7 @@ class UserWorklogs
 
                 return new UserWorklog($key, $description, $time);
             },
-            $this->results
+            $this->results ?? []
         );
 
         return $this->worklogs;
@@ -75,7 +75,7 @@ class UserWorklogs
 
         $addedIssues = [];
         $filteredResults = array_filter(
-            $this->results,
+            $this->results ?? [],
             static function ($result) use (&$addedIssues) {
                 $result = (object) $result;
                 $key = $result->issue->key;

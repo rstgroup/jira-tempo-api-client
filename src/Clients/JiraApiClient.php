@@ -10,7 +10,6 @@ use JiraTempoApi\HttpClient\Formatter\PathFormatter;
 use JiraTempoApi\Repositories\Base\Repository;
 use JiraTempoApi\Repositories\RestApi\V3\JiraApi\Users;
 use JsonMapper;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 class JiraApiClient extends JiraClient
@@ -56,7 +55,7 @@ class JiraApiClient extends JiraClient
         return $this->repositories['users'];
     }
 
-    public function getLog(): Logger
+    public function getLog(): LoggerInterface
     {
         return $this->log;
     }

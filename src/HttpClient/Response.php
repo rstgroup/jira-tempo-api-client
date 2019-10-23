@@ -4,11 +4,7 @@ declare(strict_types=1);
 namespace JiraTempoApi\HttpClient;
 
 use Exception;
-use JiraTempoApi\Domain\Model\UserWorklogs;
 use JsonMapper;
-use JsonMapper_Exception;
-use KHerGe\JSON\Exception\DecodeException;
-use KHerGe\JSON\Exception\UnknownException;
 use KHerGe\JSON\JSON;
 use Psr\Http\Message\ResponseInterface;
 
@@ -20,7 +16,7 @@ class Response
     /** @var Exception */
     private $exception;
 
-    /** @var string */
+    /** @var string|null */
     private $body;
 
     public static function fromResponse(ResponseInterface $response): Response
@@ -45,7 +41,7 @@ class Response
             $this->body = $this->response->getBody()->getContents();
         }
 
-        return $this->body;
+        return $this->body ?? '[]';
     }
 
     public function toArray(): array

@@ -54,10 +54,6 @@ class Client
             $headers['body'] = $request->body();
         }
 
-        if ($request->hasParameters()) {
-            $headers['query'] = $request->parameters();
-        }
-
         try {
             $response = $this->guzzleClient->request(
                 $request->method(),

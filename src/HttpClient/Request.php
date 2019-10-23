@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace JiraTempoApi\HttpClient;
 
 use JiraTempoApi\HttpClient\Formatter\PathFormatter;
+use JiraTempoApi\HttpClient\Formatter\QueryParametersFormatter;
 use KHerGe\JSON\JSON;
 
 class Request
@@ -165,7 +166,12 @@ class Request
         $restPath = !empty($this->path) ? PathFormatter::format(sprintf('/%s', $this->path)): '';
         $prefixPath = PathFormatter::format(sprintf('/%s', $prefixPath));
         $path = sprintf('%s%s%s', $prefixPath, $this->basePath, $restPath);
-        return PathFormatter::format($path);
+
+        return sprintf(
+            '%s%s',
+            PathFormatter::format($path),
+            $this->hasParameters() ? QueryParametersFormatter::toHttpQueryParameter($this->parameters) : ''
+        );
     }
 
     public function body(): string

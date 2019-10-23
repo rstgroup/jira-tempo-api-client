@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace JiraTempoApi\Repositories\RestApi\V3\TempoApi;
 
-use Exception;
 use JiraRestApi\Issue\IssueService;
 use JiraRestApi\Issue\IssueV3;
 use JiraRestApi\JiraException;
@@ -255,11 +254,21 @@ class Worklogs extends TempoRepository
      * @throws JiraException
      * @throws JsonMapper_Exception
      */
-    public function getUserIssuesByFilter(array $jqlToJoinByAnd = []): array
-    {
+    public function getUserIssuesByFilter(
+        array $jqlToJoinByAnd = [],
+        int $startAt = 0,
+        int $maxResults = 50,
+        array $fields = [],
+        array $expand = [],
+        bool $validateQuery = true
+    ): array {
         $issueService = new IssueService();
-        $jql = implode(' AND ', $jqlToJoinByAnd);
-        $result = $issueService->search($jql, 0, 250);
+        $parsedJQL = [];
+        foreach ($jqlToJoinByAnd as $key => $value){
+            $parsedJQL[] = sprintf($key, $value);
+        }
+        $jql = implode(' AND ', $parsedJQL);
+        $result = $issueService->search($jql, $startAt, $maxResults, $fields, $expand, $validateQuery);
 
         return $result->getIssues();
     }
@@ -271,7 +280,7 @@ class Worklogs extends TempoRepository
      * @throws JiraException
      * @throws JsonMapper_Exception
      */
-    public function getIssuesByKeysFromUserIssues(UserWorklogs $userWorklogs): array
+    public function getIssuesByKeysFromUserIssues(UserWorklogs $userWorklogs, $fields = []): array
     {
         $issueKeys = array_values(
             $this->getAllIssuesKeysByUser(
@@ -284,7 +293,12 @@ class Worklogs extends TempoRepository
         }
 
         return $this->getUserIssuesByFilter(
-            [sprintf('key in (%s)', implode(',', $issueKeys))]
+            [
+                'key in (%s)' => implode(',', $issueKeys)
+            ],
+            0,
+            250,
+            $fields
         );
     }
 }

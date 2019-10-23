@@ -128,8 +128,7 @@ class ClientTest extends UnitTestCase
         $client->send($request);
 
         $this->assertEquals($requestArray['method'], Request::METHOD_GET);
-        $this->assertEquals($requestArray['path'], '/core/3/issues/list');
-        $this->assertEquals($requestArray['headers']['query'], $requestParameters);
+        $this->assertEquals($requestArray['path'], '/core/3/issues/list?username=phpunit');
     }
 
     /** @test */

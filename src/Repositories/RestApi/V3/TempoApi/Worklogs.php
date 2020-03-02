@@ -18,6 +18,7 @@ use JiraTempoApi\Repositories\Base\TempoRepository;
 use JsonMapper_Exception;
 use KHerGe\JSON\Exception\DecodeException;
 use KHerGe\JSON\Exception\UnknownException;
+use RdKafka\Metadata;
 
 /** @see https://tempo-io.github.io/tempo-api-docs/#worklogs */
 class Worklogs extends TempoRepository
@@ -227,11 +228,31 @@ class Worklogs extends TempoRepository
         $userAccountIds = $users->getAccountIdsByUserNames([$username]);
         $userAccountId = UserAccountIds::create($userAccountIds)->getFirst();
 
-        $worklogsResponse = $this->getAllWorklogsByUserAccountId($userAccountId->getAccountId(), $parameters);
-        /** @var UserWorklogs $userWorklogs */
-        $userWorklogs = $worklogsResponse->toObject(UserWorklogs::class);
+        /** @var UserWorklogs $completeUserWorklogs */
+        $completeUserWorklogs = new UserWorklogs();
+        $parameters['offset'] = 0;
+        $parameters['limit'] = (int) (getenv('LIMIT') ?: '100');
+        do {
+            $worklogsResponse = $this->getAllWorklogsByUserAccountId($userAccountId->getAccountId(), $parameters);
 
-        return $userWorklogs;
+            /** @var UserWorklogs $userWorklogs */
+            $userWorklogs = $worklogsResponse->toObject(UserWorklogs::class);
+            $completeUserWorklogs->collect($userWorklogs->getResults());
+            $metadata = $userWorklogs->getMetadata();
+            $url = $metadata->getNext();
+            if ($url === null || $url === '') {
+                break;
+            }
+
+            $queryString = parse_url($url, PHP_URL_QUERY);
+            parse_str($queryString, $queryParameters);
+            $parameters['offset'] = (int) $queryParameters['offset'];
+            $parameters['limit'] = (int) $queryParameters['limit'];
+
+        } while ($url !== null && $url !== '');
+        $completeUserWorklogs->merge();
+
+        return $completeUserWorklogs;
     }
 
     /**

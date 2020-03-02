@@ -2,7 +2,7 @@
 
 ## Requirements:
 
-- php:5.6+
+- php:7.3+
 
 ## Dependencies:
 - vlucas/phpdotenv
@@ -25,4 +25,6 @@ JIRA_USER="jira-username"
 JIRA_PASS="jira-password-OR-api-token"
 JIRA_REST_API_V3=true
 TEMPO_TOKEN="your-tempo-access-token"
+# Optional
+LIMIT=50
 ```

@@ -6,6 +6,9 @@ namespace JiraTempoApi\Domain\Model;
 class UserWorklogs
 {
     /** @var array */
+    private $temporaryResultPageCollection;
+
+    /** @var array */
     private $results;
 
     /** @var Issue[] */
@@ -13,6 +16,23 @@ class UserWorklogs
 
     /** @var UserWorklog[] */
     private $worklogs;
+    /** @var UserWorklogsMetadata */
+    private $metadata;
+
+    public function __construct()
+    {
+        $this->results = [];
+    }
+
+    public function collect(array $results): void
+    {
+        $this->temporaryResultPageCollection[] = $results;
+    }
+
+    public function merge(): void
+    {
+        $this->results = array_merge([], ...$this->temporaryResultPageCollection);
+    }
 
     /** @return array */
     public function getResults(): array
@@ -20,16 +40,21 @@ class UserWorklogs
         return $this->results;
     }
 
+    public function getMetadata(): UserWorklogsMetadata
+    {
+        return $this->metadata;
+    }
+
     /** @return UserWorklog[] */
     public function getWorklogs(): array
     {
-        if($this->worklogs !== null || $this->worklogs === []){
+        if ($this->worklogs !== null || $this->worklogs === []) {
             return $this->worklogs;
         }
 
         $this->worklogs = array_map(
             static function ($result) {
-                $result = (object) $result;
+                $result = (object)$result;
                 $key = $result->issue->key;
                 $description = $result->description;
                 $time = $result->billableSeconds ?: $result->timeSpentSeconds;
@@ -69,7 +94,7 @@ class UserWorklogs
     /** @return Issue[] */
     public function getIssues(): array
     {
-        if($this->issues !== null || $this->issues === []){
+        if ($this->issues !== null || $this->issues === []) {
             return $this->issues;
         }
 
@@ -77,10 +102,11 @@ class UserWorklogs
         $filteredResults = array_filter(
             $this->results ?? [],
             static function ($result) use (&$addedIssues) {
-                $result = (object) $result;
+                $result = (object)$result;
                 $key = $result->issue->key;
                 if (isset($result->issue) && !isset($addedIssues[$key])) {
                     $addedIssues[$key] = true;
+
                     return true;
                 };
 
@@ -90,7 +116,8 @@ class UserWorklogs
 
         $this->issues = array_map(
             static function ($result) {
-                $result = (object) $result;
+                $result = (object)$result;
+
                 return Issue::create($result->issue);
             },
             $filteredResults

@@ -11,6 +11,7 @@ class UserWorklog
     /** @var string */
     private $description;
 
+    /** @var int */
     private $time;
 
     public function __construct(string $issue, string $description, $time)
@@ -30,7 +31,7 @@ class UserWorklog
         return $this->description;
     }
 
-    public function getTime()
+    public function getTime(): int
     {
         return $this->time;
     }
